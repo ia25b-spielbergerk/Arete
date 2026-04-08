@@ -20,7 +20,7 @@ export default function Flashcards() {
   const addXp = useStore((s) => s.addXp);
 
   const set = sets.find((s) => s.id === id);
-  type StudyCard = (typeof set.cards)[0] & { reversed: boolean };
+  type StudyCard = NonNullable<typeof set>['cards'][number] & { reversed: boolean };
   const [cards] = useState<StudyCard[]>(() => {
     if (!set) return [];
     const all = set.cards;

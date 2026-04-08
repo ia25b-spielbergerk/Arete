@@ -115,7 +115,7 @@ describe('getUser / saveUser', () => {
   });
 
   it('speichert und liest Nutzerdaten', () => {
-    const user: UserData = { streak: 5, lastActiveDate: '2026-01-01', earnedBadges: ['first_set'], totalCardsStudied: 20 };
+    const user: UserData = { streak: 5, lastActiveDate: '2026-01-01', earnedBadges: ['first_set'], totalCardsStudied: 20, xp: 0, crystals: 0 };
     saveUser(user);
     expect(getUser()).toEqual(user);
   });
@@ -129,21 +129,21 @@ describe('recordActivity', () => {
 
   it('erhöht Streak bei aufeinanderfolgenden Tagen', () => {
     const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
-    saveUser({ streak: 3, lastActiveDate: yesterday, earnedBadges: [], totalCardsStudied: 0 });
+    saveUser({ streak: 3, lastActiveDate: yesterday, earnedBadges: [], totalCardsStudied: 0, xp: 0, crystals: 0 });
     const user = recordActivity();
     expect(user.streak).toBe(4);
   });
 
   it('setzt Streak zurück nach einem ausgelassenen Tag', () => {
     const twoDaysAgo = new Date(Date.now() - 2 * 86400000).toISOString().slice(0, 10);
-    saveUser({ streak: 7, lastActiveDate: twoDaysAgo, earnedBadges: [], totalCardsStudied: 0 });
+    saveUser({ streak: 7, lastActiveDate: twoDaysAgo, earnedBadges: [], totalCardsStudied: 0, xp: 0, crystals: 0 });
     const user = recordActivity();
     expect(user.streak).toBe(1);
   });
 
   it('ändert Streak nicht wenn heute schon aktiv', () => {
     const today = new Date().toISOString().slice(0, 10);
-    saveUser({ streak: 5, lastActiveDate: today, earnedBadges: [], totalCardsStudied: 0 });
+    saveUser({ streak: 5, lastActiveDate: today, earnedBadges: [], totalCardsStudied: 0, xp: 0, crystals: 0 });
     const user = recordActivity();
     expect(user.streak).toBe(5);
   });

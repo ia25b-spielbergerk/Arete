@@ -338,8 +338,6 @@ function DiaryTab() {
   ];
   const MONTH_NAMES = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
 
-  const selectedMood = MOODS.find((m) => m.value === mood)!;
-
   return (
     <div>
       {/* Datums-Navigation */}

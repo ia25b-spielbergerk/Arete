@@ -7,6 +7,8 @@ const DEFAULT_USER: UserData = {
   lastActiveDate: null,
   earnedBadges: [],
   totalCardsStudied: 0,
+  xp: 0,
+  crystals: 0,
 };
 
 const makeSet = (id: string): CardSet => ({

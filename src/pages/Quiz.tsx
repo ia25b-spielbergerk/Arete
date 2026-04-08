@@ -50,7 +50,6 @@ export default function Quiz() {
 
   const [qIndex, setQIndex] = useState(0);
   const [selected, setSelected] = useState<string | null>(null);
-  const [score, setScore] = useState(0);
   const [answers, setAnswers] = useState<{ correct: boolean; selected: string; answer: string; front: string }[]>([]);
   const [confirmLeave, setConfirmLeave] = useState(false);
 
@@ -73,7 +72,6 @@ export default function Quiz() {
     setSelected(option);
 
     const correct = option === q.correct;
-    if (correct) setScore((s) => s + 1);
     setAnswers((prev) => [...prev, { correct, selected: option, answer: q.correct, front: q.card.front }]);
     if (!q.card.reversed) recordCardResult(id!, q.card.id, correct);
   };
