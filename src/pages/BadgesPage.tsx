@@ -7,7 +7,13 @@ export default function BadgesPage() {
   const navigate = useNavigate();
   const user = useStore((s) => s.user);
   const sets = useStore((s) => s.sets);
+  const diaryEntries = useStore((s) => s.diaryEntries);
+  const habits = useStore((s) => s.habits);
+  const tasks = useStore((s) => s.tasks);
+  const notes = useStore((s) => s.notes);
   const earned = user.earnedBadges;
+
+  const extra = { diaryEntries, habits, tasks, notes };
 
   const earnedBadges = BADGES.filter((b) => earned.includes(b.id));
   const lockedBadges = BADGES.filter((b) => !earned.includes(b.id));
@@ -41,15 +47,16 @@ export default function BadgesPage() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {earnedBadges.map((badge) => {
                 const Icon = badge.icon;
+                const c = badge.color;
                 return (
                   <div
                     key={badge.id}
                     className="flex flex-col items-center text-center rounded-xl p-4 border"
-                    style={{ background: 'rgba(127,119,221,0.09)', borderColor: 'rgba(127,119,221,0.22)' }}
+                    style={{ background: `${c}18`, borderColor: `${c}40` }}
                   >
-                    <Icon size={36} className="mb-2" style={{ color: '#7F77DD' }} />
-                    <p className="text-sm font-semibold" style={{ color: '#7F77DD' }}>{badge.name}</p>
-                    <p className="text-xs mt-1" style={{ color: 'rgba(127,119,221,0.6)' }}>{badge.description}</p>
+                    <Icon size={36} className="mb-2" style={{ color: c }} />
+                    <p className="text-sm font-semibold" style={{ color: c }}>{badge.name}</p>
+                    <p className="text-xs mt-1" style={{ color: `${c}99` }}>{badge.description}</p>
                   </div>
                 );
               })}
@@ -63,7 +70,7 @@ export default function BadgesPage() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {lockedBadges.map((badge) => {
                 const Icon = badge.icon;
-                const { current, max } = badge.getProgress(user, sets);
+                const { current, max } = badge.getProgress(user, sets, extra);
                 const pct = max > 0 ? Math.round((current / max) * 100) : 0;
                 return (
                   <div
@@ -81,7 +88,7 @@ export default function BadgesPage() {
                       <div className="w-full bg-gray-200 dark:bg-white/10 rounded-full h-1.5">
                         <div
                           className="h-1.5 rounded-full transition-all duration-500"
-                          style={{ width: `${pct}%`, backgroundColor: '#7F77DD' }}
+                          style={{ width: `${pct}%`, backgroundColor: badge.color }}
                         />
                       </div>
                     </div>

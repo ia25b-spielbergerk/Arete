@@ -1,4 +1,4 @@
-import type { CardSet, SetProgress, UserData, CardStats, DailyState, DiaryEntry, Task, Habit, Note } from './types';
+import type { CardSet, SetProgress, UserData, CardStats, DailyState, DiaryEntry, Task, Habit, Note, DailyCrystalTracker } from './types';
 
 const KEYS = {
   SETS: 'lernapp_sets',
@@ -10,6 +10,7 @@ const KEYS = {
   TASKS: 'lernapp_tasks',
   HABITS: 'lernapp_habits',
   NOTES: 'lernapp_notes',
+  DAILY_CRYSTALS: 'lernapp_daily_crystals',
 } as const;
 
 // ── Hilfsfunktionen ─────────────────────────────────────────────────────────
@@ -275,4 +276,29 @@ export function saveNote(note: Note): void {
 
 export function deleteNote(id: string): void {
   save(KEYS.NOTES, getNotes().filter((n) => n.id !== id));
+}
+
+// ── Täglicher Kristall-Tracker ───────────────────────────────────────────────
+
+const EMPTY_TRACKER = (date: string): DailyCrystalTracker => ({
+  date,
+  diaryGranted: false,
+  taskCrystals: 0,
+  rewardedTaskIds: [],
+  rewardedHabitIds: [],
+  sessionCrystals: 0,
+  dailyChallengeGranted: false,
+  allDoneBonusGranted: false,
+  totalCapped: 0,
+});
+
+export function getDailyCrystalTracker(): DailyCrystalTracker {
+  const today = new Date().toISOString().slice(0, 10);
+  const stored = load<DailyCrystalTracker | null>(KEYS.DAILY_CRYSTALS, null);
+  if (!stored || stored.date !== today) return EMPTY_TRACKER(today);
+  return stored;
+}
+
+export function saveDailyCrystalTracker(tracker: DailyCrystalTracker): void {
+  save(KEYS.DAILY_CRYSTALS, tracker);
 }

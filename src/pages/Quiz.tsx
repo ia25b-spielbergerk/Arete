@@ -51,7 +51,7 @@ export default function Quiz() {
   const [qIndex, setQIndex] = useState(0);
   const [selected, setSelected] = useState<string | null>(null);
   const [score, setScore] = useState(0);
-  const [answers, setAnswers] = useState<{ correct: boolean; selected: string; answer: string }[]>([]);
+  const [answers, setAnswers] = useState<{ correct: boolean; selected: string; answer: string; front: string }[]>([]);
   const [confirmLeave, setConfirmLeave] = useState(false);
 
   if (!set) {
@@ -74,13 +74,14 @@ export default function Quiz() {
 
     const correct = option === q.correct;
     if (correct) setScore((s) => s + 1);
-    setAnswers((prev) => [...prev, { correct, selected: option, answer: q.correct }]);
+    setAnswers((prev) => [...prev, { correct, selected: option, answer: q.correct, front: q.card.front }]);
     if (!q.card.reversed) recordCardResult(id!, q.card.id, correct);
   };
 
   const handleNext = () => {
     if (qIndex + 1 >= questions.length) {
-      const finalScore = Math.round(((score + (selected === q.correct ? 1 : 0)) / questions.length) * 100);
+      const correctCount = answers.filter((a) => a.correct).length;
+      const finalScore = Math.round((correctCount / questions.length) * 100);
 
       const prev = getSetProgress(id!);
       updateProgress({
@@ -93,7 +94,7 @@ export default function Quiz() {
 
       finishSession('quiz', finalScore);
       markActivity();
-      addXp(20 + (finalScore === 100 ? 50 : 0));
+      addXp(20 + (correctCount === questions.length ? 50 : 0));
 
       navigate('/results', {
         state: {
@@ -101,7 +102,7 @@ export default function Quiz() {
           setName: set.name,
           mode: 'quiz',
           score: finalScore,
-          answers: [...answers, { correct: selected === q.correct, selected: selected!, answer: q.correct }],
+          answers,
           questions: questions.map((q) => ({ front: q.card.front, back: q.card.back })),
         },
       });

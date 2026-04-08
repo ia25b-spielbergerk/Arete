@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import {
   Flame, Gem, Sun, Cloud, CloudRain, CloudSnow, CloudLightning, CloudDrizzle,
   CircleCheck, CalendarDays, ChevronRight, Quote, Check,
-  BookOpen, Plus, Repeat2, ArrowRight, Settings,
+  BookOpen, Plus, Repeat2, ArrowRight, Settings, Zap,
 } from 'lucide-react';
 import Layout from '../components/Layout';
 import { useStore } from '../store';
@@ -103,6 +103,7 @@ export default function Dashboard() {
   const tasks = useStore((s) => s.tasks);
   const habits = useStore((s) => s.habits);
   const sets = useStore((s) => s.sets);
+  const cardStats = useStore((s) => s.cardStats);
   const checkInHabit = useStore((s) => s.checkInHabit);
   const completeTask = useStore((s) => s.completeTask);
 
@@ -131,6 +132,16 @@ export default function Dashboard() {
   const previewTasks = [...todayTasks.filter((t) => !isTaskDone(t))]
     .sort((a, b) => ({ hoch: 0, mittel: 1, niedrig: 2 }[a.priority] - { hoch: 0, mittel: 1, niedrig: 2 }[b.priority]))
     .slice(0, 3);
+
+  // ── Tagesstatistik ─────────────────────────────────────────────────────────
+  const todayCardStats = useMemo(() => {
+    const flat = Object.values(cardStats).flatMap((s) => Object.values(s));
+    return flat.filter((s) => new Date(s.lastSeen).toISOString().slice(0, 10) === today);
+  }, [cardStats, today]);
+
+  const xpToday = todayCardStats.length * 10;
+  const sessionsToday = new Set(todayCardStats.map((s) => s.setId)).size;
+  const habitsDoneToday = habits.filter((h) => h.checkIns.includes(today)).length;
 
   const PRIORITY_DOT: Record<string, string> = {
     hoch: 'bg-[#E24B4A]',
@@ -261,6 +272,42 @@ export default function Dashboard() {
           )}
         </div>
       )}
+
+      {/* Tagesstatistik */}
+      <div className="grid grid-cols-3 gap-2 mb-4">
+        <div
+          className="rounded-xl px-3 py-2.5 border"
+          style={{ background: 'rgba(127,119,221,0.07)', borderColor: 'rgba(127,119,221,0.18)' }}
+        >
+          <div className="flex items-center gap-1 mb-1">
+            <Zap size={11} style={{ color: '#7F77DD' }} />
+            <p className="text-[10px] text-gray-400 dark:text-white/40">XP heute</p>
+          </div>
+          <p className="text-lg font-bold leading-none" style={{ color: '#7F77DD' }}>{xpToday}</p>
+        </div>
+        <div
+          className="rounded-xl px-3 py-2.5 border"
+          style={{ background: 'rgba(127,119,221,0.07)', borderColor: 'rgba(127,119,221,0.18)' }}
+        >
+          <div className="flex items-center gap-1 mb-1">
+            <BookOpen size={11} style={{ color: '#7F77DD' }} />
+            <p className="text-[10px] text-gray-400 dark:text-white/40">Sessions</p>
+          </div>
+          <p className="text-lg font-bold leading-none" style={{ color: '#7F77DD' }}>{sessionsToday}</p>
+        </div>
+        <div
+          className="rounded-xl px-3 py-2.5 border"
+          style={{ background: 'rgba(239,159,39,0.07)', borderColor: 'rgba(239,159,39,0.18)' }}
+        >
+          <div className="flex items-center gap-1 mb-1">
+            <Repeat2 size={11} style={{ color: '#EF9F27' }} />
+            <p className="text-[10px] text-gray-400 dark:text-white/40">Habits</p>
+          </div>
+          <p className="text-lg font-bold leading-none" style={{ color: '#EF9F27' }}>
+            {habitsDoneToday}<span className="text-xs font-normal opacity-50">/{habits.length}</span>
+          </p>
+        </div>
+      </div>
 
       {/* Heutige Tasks */}
       <div className="mb-4">

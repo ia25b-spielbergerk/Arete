@@ -19,18 +19,19 @@ interface ResultState {
 }
 
 function ScoreCircle({ score }: { score: number }) {
+  const displayed = Math.min(score, 100);
   // Green=80+ · Orange=50-79 (warning) · Red=<50
-  const color = score >= 80 ? '#1D9E75' : score >= 50 ? '#EF9F27' : '#E24B4A';
-  const ScoreIcon = score === 100 ? Trophy : score >= 80 ? Award : score >= 50 ? TrendingUp : BookOpen;
+  const color = displayed >= 80 ? '#1D9E75' : displayed >= 50 ? '#EF9F27' : '#E24B4A';
+  const ScoreIcon = displayed === 100 ? Trophy : displayed >= 80 ? Award : displayed >= 50 ? TrendingUp : BookOpen;
 
   return (
     <div className="text-center mb-8">
       <div className="flex justify-center mb-3">
         <ScoreIcon size={52} style={{ color }} />
       </div>
-      <p className="text-6xl font-bold" style={{ color }}>{score}%</p>
+      <p className="text-6xl font-bold" style={{ color }}>{displayed}%</p>
       <p className="text-gray-400 dark:text-white/40 text-sm mt-2">
-        {score === 100 ? 'Perfekt! Alle richtig!' : score >= 80 ? 'Super gemacht!' : score >= 50 ? 'Gut, weiter üben!' : 'Noch etwas Übung nötig'}
+        {displayed === 100 ? 'Perfekt! Alle richtig!' : displayed >= 80 ? 'Super gemacht!' : displayed >= 50 ? 'Gut, weiter üben!' : 'Noch etwas Übung nötig'}
       </p>
     </div>
   );
@@ -108,11 +109,11 @@ export default function Results() {
             Nochmal
           </button>
           <button
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/lernen')}
             className="flex-1 text-white font-medium py-2.5 rounded-lg transition-opacity hover:opacity-80 text-sm cursor-pointer"
             style={{ backgroundColor: '#7F77DD' }}
           >
-            Startseite
+            Zurück zum Lernen
           </button>
         </div>
       </div>

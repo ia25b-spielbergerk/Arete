@@ -38,8 +38,8 @@ export default function BadgeToast() {
       }`}
     >
       <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-xl rounded-2xl px-5 py-3.5 flex items-center gap-3.5 min-w-[260px]">
-        <div className="rounded-xl p-2.5 shrink-0" style={{ background: 'rgba(127,119,221,0.12)' }}>
-          <Icon size={24} style={{ color: '#7F77DD' }} />
+        <div className="rounded-xl p-2.5 shrink-0" style={{ background: `${badge.color}20` }}>
+          <Icon size={24} style={{ color: badge.color }} />
         </div>
         <div>
           <p className="text-xs text-gray-400 font-medium uppercase tracking-wide">Badge freigeschaltet</p>

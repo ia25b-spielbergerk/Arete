@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { CardSet, SetProgress, UserData, BadgeId, CardStats, DailyState, DiaryEntry, Task, Habit, Note } from './types';
+import type { CardSet, SetProgress, UserData, BadgeId, CardStats, DailyState, DiaryEntry, Task, Habit, Note, DailyCrystalTracker } from './types';
 import {
   getSets,
   saveSet,
@@ -27,10 +27,27 @@ import {
   getNotes,
   saveNote,
   deleteNote,
+  getDailyCrystalTracker,
+  saveDailyCrystalTracker,
 } from './storage';
 import { getLevelInfo } from './xp';
 import { shuffle } from './utils';
 import { BADGES } from './badges';
+
+function maxConsecutiveDays(dates: string[]): number {
+  const sorted = [...new Set(dates)].sort();
+  if (sorted.length === 0) return 0;
+  let max = 1, curr = 1;
+  for (let i = 1; i < sorted.length; i++) {
+    const diff =
+      (new Date(sorted[i] + 'T12:00:00').getTime() -
+        new Date(sorted[i - 1] + 'T12:00:00').getTime()) /
+      86400000;
+    if (diff === 1) { curr++; if (curr > max) max = curr; }
+    else curr = 1;
+  }
+  return max;
+}
 
 interface AppState {
   sets: CardSet[];
@@ -43,6 +60,7 @@ interface AppState {
   tasks: Task[];
   habits: Habit[];
   notes: Note[];
+  dailyCrystals: DailyCrystalTracker;
 
   // Sets
   loadSets: () => void;
@@ -124,6 +142,7 @@ export const useStore = create<AppState>((set, get) => ({
   tasks: getTasks(),
   habits: getHabits(),
   notes: getNotes(),
+  dailyCrystals: getDailyCrystalTracker(),
 
   // ── Sets ────────────────────────────────────────────────────────────────
 
@@ -191,19 +210,50 @@ export const useStore = create<AppState>((set, get) => ({
   // ── Badges ──────────────────────────────────────────────────────────────
 
   checkAndAwardBadges: () => {
-    const { sets, user } = get();
+    const { sets, user, diaryEntries, habits, tasks, notes } = get();
     const newBadges: BadgeId[] = [];
 
     const award = (id: BadgeId) => {
       if (!user.earnedBadges.includes(id)) newBadges.push(id);
     };
 
+    // Lernen
     if (sets.length >= 1) award('first_set');
     if (sets.length >= 5) award('five_sets');
     const totalCards = sets.reduce((sum, s) => sum + s.cards.length, 0);
     if (user.totalCardsStudied >= 50 || totalCards >= 50) award('fifty_cards');
     if (user.streak >= 3) award('streak_3');
     if (user.streak >= 7) award('streak_7');
+
+    // Tagebuch
+    if (diaryEntries.length >= 1) award('diary_first');
+    if (maxConsecutiveDays(diaryEntries.map((e) => e.date)) >= 7) award('diary_streak_7');
+    if (diaryEntries.length >= 30) award('diary_30');
+    if (diaryEntries.filter((e) => e.mood === 5).length >= 5) award('diary_mood_5');
+
+    // Habits
+    if (habits.length >= 1) award('habit_first');
+    const bestHabitStreak = Math.max(0, ...habits.map((h) => h.streak));
+    if (bestHabitStreak >= 7) award('habit_streak_7');
+    if (bestHabitStreak >= 30) award('habit_streak_30');
+
+    // Tasks
+    const totalDone =
+      tasks.filter((t) => !t.recurring && t.completed).length +
+      tasks.reduce((s, t) => s + t.completedDates.length, 0);
+    if (totalDone >= 1) award('task_first');
+    if (totalDone >= 10) award('task_10');
+    if (totalDone >= 50) award('task_50');
+
+    // Notizen
+    if (notes.length >= 1) award('note_first');
+    if (notes.length >= 10) award('note_10');
+    if (notes.some((n) => n.tags.length > 0)) award('note_tagged');
+
+    // Kristalle
+    if ((user.crystals ?? 0) >= 500) award('crystals_500');
+    if ((user.crystals ?? 0) >= 1000) award('crystals_1000');
+    if ((user.crystals ?? 0) >= 5000) award('crystals_5000');
 
     if (newBadges.length > 0) {
       const crystalGain = newBadges.length * 30;
@@ -295,13 +345,21 @@ export const useStore = create<AppState>((set, get) => ({
     };
     saveDailyChallenge(updated);
 
-    // +20 Kristalle für abgeschlossene Daily Challenge
-    const crystalGain = 20;
-    const updatedUser: UserData = { ...user, crystals: (user.crystals ?? 0) + crystalGain };
-    saveUser(updatedUser);
+    // +20 Kristalle für abgeschlossene Daily Challenge — einmal pro Tag, gecappt
+    const t = get().dailyCrystals;
+    const crystalGain = (!t.dailyChallengeGranted && t.totalCapped < 300)
+      ? Math.min(20, 300 - t.totalCapped)
+      : 0;
+    const nt: DailyCrystalTracker = { ...t, dailyChallengeGranted: true, totalCapped: t.totalCapped + crystalGain };
+    const updatedUser: UserData = crystalGain > 0
+      ? { ...user, crystals: (user.crystals ?? 0) + crystalGain }
+      : user;
+    if (crystalGain > 0) saveUser(updatedUser);
+    saveDailyCrystalTracker(nt);
     set((state) => ({
       daily: updated,
       user: updatedUser,
+      dailyCrystals: nt,
       pendingCrystalGain: state.pendingCrystalGain + crystalGain,
     }));
   },
@@ -315,7 +373,17 @@ export const useStore = create<AppState>((set, get) => ({
     if (mode === 'quiz' && !user.earnedBadges.includes('first_quiz')) { toAward.push('first_quiz'); crystalGain += 30; }
     if (mode === 'test' && !user.earnedBadges.includes('first_test')) { toAward.push('first_test'); crystalGain += 30; }
     if (score === 100 && !user.earnedBadges.includes('perfect_score')) { toAward.push('perfect_score'); crystalGain += 30; }
-    if (score === 100) crystalGain += 15; // immer +15 bei 100%
+    // +15 bei 100% — gecappt: max 100 Kristalle/Tag aus Lerneinheiten
+    if (score === 100) {
+      const t = get().dailyCrystals;
+      const sessionBonus = Math.max(0, Math.min(15, 100 - t.sessionCrystals, 300 - t.totalCapped));
+      if (sessionBonus > 0) {
+        crystalGain += sessionBonus;
+        const nt: DailyCrystalTracker = { ...t, sessionCrystals: t.sessionCrystals + sessionBonus, totalCapped: t.totalCapped + sessionBonus };
+        saveDailyCrystalTracker(nt);
+        set({ dailyCrystals: nt });
+      }
+    }
 
     if (toAward.length > 0 || crystalGain > 0) {
       const updatedUser: UserData = {
@@ -379,13 +447,23 @@ export const useStore = create<AppState>((set, get) => ({
     saveDiaryEntry(entry);
     set({ diaryEntries: getDiaryEntries() });
 
-    // +10 Kristalle für neuen Eintrag (einmal pro Tag)
+    // +10 Kristalle für neuen Eintrag — einmal pro Tag, gecappt
     if (isNew) {
       const today = new Date().toISOString().slice(0, 10);
       if (entry.date === today) {
-        get().addCrystals(10);
+        const t = get().dailyCrystals;
+        if (!t.diaryGranted && t.totalCapped < 300) {
+          const grant = Math.min(10, 300 - t.totalCapped);
+          const nt: DailyCrystalTracker = { ...t, diaryGranted: true, totalCapped: t.totalCapped + grant };
+          const cu = get().user;
+          const nu: UserData = { ...cu, crystals: (cu.crystals ?? 0) + grant };
+          saveUser(nu);
+          saveDailyCrystalTracker(nt);
+          set((state) => ({ user: nu, dailyCrystals: nt, pendingCrystalGain: state.pendingCrystalGain + grant }));
+        }
       }
     }
+    get().checkAndAwardBadges();
   },
 
   removeDiary: (id) => {
@@ -438,21 +516,31 @@ export const useStore = create<AppState>((set, get) => ({
     set({ tasks: getTasks() });
 
     if (isNowCompleted && !wasCompleted) {
-      get().addCrystals(5);
+      // +5 pro Task — gecappt: max 50/Tag, kein erneutes Vergeben
+      const t = get().dailyCrystals;
+      if (!t.rewardedTaskIds.includes(taskId) && t.taskCrystals < 50 && t.totalCapped < 300) {
+        const grant = Math.min(5, 50 - t.taskCrystals, 300 - t.totalCapped);
+        const nt: DailyCrystalTracker = { ...t, rewardedTaskIds: [...t.rewardedTaskIds, taskId], taskCrystals: t.taskCrystals + grant, totalCapped: t.totalCapped + grant };
+        const cu = get().user;
+        const nu: UserData = { ...cu, crystals: (cu.crystals ?? 0) + grant };
+        saveUser(nu);
+        saveDailyCrystalTracker(nt);
+        set((state) => ({ user: nu, dailyCrystals: nt, pendingCrystalGain: state.pendingCrystalGain + grant }));
+      }
 
       // Bonus +25 wenn alle Tasks des Tages erledigt
       const allTasks = getTasks();
       const todayTasks = allTasks.filter((t) => {
         if (t.recurring === 'täglich') return true;
         if (t.recurring === 'wöchentlich') {
-          // Prüfe ob der Task diese Woche noch nicht erledigt wurde
-          const dayOfWeek = new Date(date).getDay();
-          const startOfWeek = new Date(date);
-          startOfWeek.setDate(startOfWeek.getDate() - dayOfWeek);
-          return !t.completedDates.some((d) => {
-            const dDate = new Date(d);
-            return dDate >= startOfWeek && dDate <= new Date(date);
-          });
+          const sel = new Date(date + 'T00:00:00');
+          const startOfWeek = new Date(sel);
+          startOfWeek.setDate(startOfWeek.getDate() - sel.getDay());
+          const startStr = startOfWeek.toISOString().slice(0, 10);
+          const doneThisWeek = t.completedDates.some((d) => d >= startStr && d <= date);
+          const doneToday = t.completedDates.includes(date);
+          // Task gehört zu heute: noch nicht diese Woche erledigt, ODER genau heute erledigt
+          return !doneThisWeek || doneToday;
         }
         return t.date === date;
       });
@@ -460,8 +548,36 @@ export const useStore = create<AppState>((set, get) => ({
         if (t.recurring) return t.completedDates.includes(date);
         return t.id === taskId ? true : t.completed;
       });
-      if (allDone) get().addCrystals(25);
+      if (allDone) {
+        // Perfekter-Tag-Bonus gecappt (zählt zum Task-Limit) — nur einmal pro Tag
+        const t2 = get().dailyCrystals;
+        if (!t2.allDoneBonusGranted && t2.taskCrystals < 50 && t2.totalCapped < 300) {
+          const grant2 = Math.min(25, 50 - t2.taskCrystals, 300 - t2.totalCapped);
+          const nt2: DailyCrystalTracker = { ...t2, allDoneBonusGranted: true, taskCrystals: t2.taskCrystals + grant2, totalCapped: t2.totalCapped + grant2 };
+          const cu2 = get().user;
+          const nu2: UserData = { ...cu2, crystals: (cu2.crystals ?? 0) + grant2 };
+          saveUser(nu2);
+          saveDailyCrystalTracker(nt2);
+          set((state) => ({ user: nu2, dailyCrystals: nt2, pendingCrystalGain: state.pendingCrystalGain + grant2 }));
+        }
+        // task_perfect_day Badge
+        const { user: u } = get();
+        if (!u.earnedBadges.includes('task_perfect_day')) {
+          const updatedUser: UserData = {
+            ...u,
+            earnedBadges: [...u.earnedBadges, 'task_perfect_day'],
+            crystals: (u.crystals ?? 0) + 30,
+          };
+          saveUser(updatedUser);
+          set((state) => ({
+            user: updatedUser,
+            pendingBadges: [...state.pendingBadges, 'task_perfect_day'],
+            pendingCrystalGain: state.pendingCrystalGain + 30,
+          }));
+        }
+      }
     }
+    get().checkAndAwardBadges();
   },
 
   // ── Gewohnheiten ──────────────────────────────────────────────────────────
@@ -469,6 +585,7 @@ export const useStore = create<AppState>((set, get) => ({
   addHabit: (habit) => {
     saveHabit(habit);
     set({ habits: getHabits() });
+    get().checkAndAwardBadges();
   },
 
   updateHabit: (habit) => {
@@ -524,15 +641,53 @@ export const useStore = create<AppState>((set, get) => ({
     set({ habits: getHabits() });
 
     if (!alreadyChecked) {
-      get().addCrystals(10);
+      // +10 pro Habit pro Tag — gecappt, kein erneutes Vergeben nach Rückgängig+Abhaken
+      const t = get().dailyCrystals;
+      if (!t.rewardedHabitIds.includes(habitId) && t.totalCapped < 300) {
+        const grant = Math.min(10, 300 - t.totalCapped);
+        const nt: DailyCrystalTracker = { ...t, rewardedHabitIds: [...t.rewardedHabitIds, habitId], totalCapped: t.totalCapped + grant };
+        const cu = get().user;
+        const nu: UserData = { ...cu, crystals: (cu.crystals ?? 0) + grant };
+        saveUser(nu);
+        saveDailyCrystalTracker(nt);
+        set((state) => ({ user: nu, dailyCrystals: nt, pendingCrystalGain: state.pendingCrystalGain + grant }));
+      }
 
       // Bonus +20 wenn alle Habits an diesem Tag erledigt
       const allHabits = getHabits();
       const allDone = allHabits.length > 0 && allHabits.every((h) =>
         h.id === habitId ? true : h.checkIns.includes(date)
       );
-      if (allDone) get().addCrystals(20);
+      if (allDone) {
+        // Allrounder-Bonus gecappt
+        const t2 = get().dailyCrystals;
+        if (t2.totalCapped < 300) {
+          const grant2 = Math.min(20, 300 - t2.totalCapped);
+          const nt2: DailyCrystalTracker = { ...t2, totalCapped: t2.totalCapped + grant2 };
+          const cu2 = get().user;
+          const nu2: UserData = { ...cu2, crystals: (cu2.crystals ?? 0) + grant2 };
+          saveUser(nu2);
+          saveDailyCrystalTracker(nt2);
+          set((state) => ({ user: nu2, dailyCrystals: nt2, pendingCrystalGain: state.pendingCrystalGain + grant2 }));
+        }
+        // habit_allrounder Badge
+        const { user: u } = get();
+        if (!u.earnedBadges.includes('habit_allrounder')) {
+          const updatedUser: UserData = {
+            ...u,
+            earnedBadges: [...u.earnedBadges, 'habit_allrounder'],
+            crystals: (u.crystals ?? 0) + 30,
+          };
+          saveUser(updatedUser);
+          set((state) => ({
+            user: updatedUser,
+            pendingBadges: [...state.pendingBadges, 'habit_allrounder'],
+            pendingCrystalGain: state.pendingCrystalGain + 30,
+          }));
+        }
+      }
     }
+    get().checkAndAwardBadges();
   },
 
   // ── Notizen ───────────────────────────────────────────────────────────────
@@ -541,11 +696,13 @@ export const useStore = create<AppState>((set, get) => ({
     saveNote(note);
     set({ notes: getNotes() });
     get().addCrystals(5);
+    get().checkAndAwardBadges();
   },
 
   updateNote: (note) => {
     saveNote(note);
     set({ notes: getNotes() });
+    get().checkAndAwardBadges();
   },
 
   removeNote: (id) => {

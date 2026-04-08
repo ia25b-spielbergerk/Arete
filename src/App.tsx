@@ -19,6 +19,8 @@ import DailyChallenge from './pages/DailyChallenge';
 import Results from './pages/Results';
 import BadgesPage from './pages/BadgesPage';
 import ShopPage from './pages/ShopPage';
+import StatsPage from './pages/StatsPage';
+import MehrPage from './pages/MehrPage';
 import SettingsPage from './pages/Settings';
 import NotFound from './pages/NotFound';
 
@@ -70,6 +72,8 @@ export default function App() {
         <Route path="/results" element={<Results />} />
         <Route path="/badges" element={<BadgesPage />} />
         <Route path="/shop" element={<ShopPage />} />
+        <Route path="/statistiken" element={<StatsPage />} />
+        <Route path="/mehr" element={<MehrPage />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
