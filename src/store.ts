@@ -174,6 +174,7 @@ export const useStore = create<AppState>((set, get) => ({
 
   loadAllData: () => {
     const userId = get().currentUserId;
+    console.log('[loadAllData] userId:', userId);
     if (!userId) return;
 
     Promise.all([
@@ -188,10 +189,11 @@ export const useStore = create<AppState>((set, get) => ({
       getNotes(userId),
       getDailyCrystalTracker(userId),
     ]).then(([sets, user, progressArr, cardStats, daily, diaryEntries, tasks, habits, notes, dailyCrystals]) => {
+      console.log('[loadAllData] loaded — sets:', sets.length, 'tasks:', tasks.length, 'habits:', habits.length, 'notes:', notes.length, 'diary:', diaryEntries.length);
       const progress = Object.fromEntries(progressArr.map((p) => [p.setId, p]));
       set({ sets, user, progress, cardStats, daily, diaryEntries, tasks, habits, notes, dailyCrystals });
       get().initDaily();
-    }).catch(console.error);
+    }).catch((err) => console.error('[loadAllData] Promise.all failed:', err));
   },
 
   // ── Sets ────────────────────────────────────────────────────────────────
