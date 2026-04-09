@@ -1,16 +1,15 @@
 import { create } from 'zustand';
 import type { CardSet, SetProgress, UserData, BadgeId, CardStats, DailyState, DiaryEntry, Task, Habit, Note, DailyCrystalTracker } from './types';
 import {
+  DEFAULT_USER,
+  EMPTY_TRACKER,
+  getUser,
+  saveUser,
   getSets,
   saveSet,
   deleteSet,
-  getUser,
-  saveUser,
   getAllProgress,
   saveProgress,
-  recordActivity,
-  addCardsStudied,
-  addXpToUser,
   getAllCardStats,
   updateCardResult,
   getDailyChallenge,
@@ -24,6 +23,8 @@ import {
   getHabits,
   saveHabit,
   deleteHabit,
+  addHabitCheckin,
+  removeHabitCheckin,
   getNotes,
   saveNote,
   deleteNote,
@@ -50,6 +51,7 @@ function maxConsecutiveDays(dates: string[]): number {
 }
 
 interface AppState {
+  currentUserId: string | null;
   sets: CardSet[];
   user: UserData;
   progress: Record<string, SetProgress>;
@@ -62,14 +64,16 @@ interface AppState {
   notes: Note[];
   dailyCrystals: DailyCrystalTracker;
 
+  // Auth
+  setCurrentUser: (id: string | null) => void;
+  loadAllData: () => void;
+
   // Sets
-  loadSets: () => void;
   addSet: (set: CardSet) => void;
   updateSet: (set: CardSet) => void;
   removeSet: (id: string) => void;
 
   // User & Streak
-  loadUser: () => void;
   markActivity: () => void;
   addStudiedCards: (count: number) => void;
 
@@ -128,78 +132,140 @@ interface AppState {
   removeNote: (id: string) => void;
 }
 
+const today0 = new Date().toISOString().slice(0, 10);
+
 export const useStore = create<AppState>((set, get) => ({
+  currentUserId: null,
   sets: [],
-  user: getUser(),
-  progress: Object.fromEntries(getAllProgress().map((p) => [p.setId, p])),
+  user: { ...DEFAULT_USER },
+  progress: {},
   darkMode: localStorage.getItem('lernapp_darkmode') === 'true',
-  cardStats: getAllCardStats(),
-  daily: getDailyChallenge(),
+  cardStats: {},
+  daily: null,
   pendingBadges: [],
   pendingLevelUp: null,
   pendingCrystalGain: 0,
-  diaryEntries: getDiaryEntries(),
-  tasks: getTasks(),
-  habits: getHabits(),
-  notes: getNotes(),
-  dailyCrystals: getDailyCrystalTracker(),
+  diaryEntries: [],
+  tasks: [],
+  habits: [],
+  notes: [],
+  dailyCrystals: EMPTY_TRACKER(today0),
+
+  // ── Auth ─────────────────────────────────────────────────────────────────
+
+  setCurrentUser: (id) => {
+    set({ currentUserId: id });
+    if (!id) {
+      const today = new Date().toISOString().slice(0, 10);
+      set({
+        sets: [],
+        user: { ...DEFAULT_USER },
+        progress: {},
+        cardStats: {},
+        daily: null,
+        diaryEntries: [],
+        tasks: [],
+        habits: [],
+        notes: [],
+        dailyCrystals: EMPTY_TRACKER(today),
+      });
+    }
+  },
+
+  loadAllData: () => {
+    const userId = get().currentUserId;
+    if (!userId) return;
+
+    Promise.all([
+      getSets(userId),
+      getUser(userId),
+      getAllProgress(userId),
+      getAllCardStats(userId),
+      getDailyChallenge(userId),
+      getDiaryEntries(userId),
+      getTasks(userId),
+      getHabits(userId),
+      getNotes(userId),
+      getDailyCrystalTracker(userId),
+    ]).then(([sets, user, progressArr, cardStats, daily, diaryEntries, tasks, habits, notes, dailyCrystals]) => {
+      const progress = Object.fromEntries(progressArr.map((p) => [p.setId, p]));
+      set({ sets, user, progress, cardStats, daily, diaryEntries, tasks, habits, notes, dailyCrystals });
+      get().initDaily();
+    }).catch(console.error);
+  },
 
   // ── Sets ────────────────────────────────────────────────────────────────
 
-  loadSets: () => set({ sets: getSets() }),
-
   addSet: (newSet) => {
-    saveSet(newSet);
-    set({ sets: getSets() });
+    const userId = get().currentUserId;
+    if (!userId) return;
+    set((state) => ({ sets: [newSet, ...state.sets] }));
+    saveSet(newSet, userId).catch(console.error);
     get().checkAndAwardBadges();
   },
 
   updateSet: (updated) => {
-    saveSet(updated);
-    set({ sets: getSets() });
+    const userId = get().currentUserId;
+    if (!userId) return;
+    set((state) => ({ sets: state.sets.map((s) => s.id === updated.id ? updated : s) }));
+    saveSet(updated, userId).catch(console.error);
   },
 
   removeSet: (id) => {
-    deleteSet(id);
+    const userId = get().currentUserId;
+    if (!userId) return;
     set((state) => {
       const { [id]: _, ...rest } = state.progress;
-      return { sets: getSets(), progress: rest };
+      return { sets: state.sets.filter((s) => s.id !== id), progress: rest };
     });
+    deleteSet(id).catch(console.error);
   },
 
   // ── User ────────────────────────────────────────────────────────────────
 
-  loadUser: () => set({ user: getUser() }),
-
   markActivity: () => {
-    const oldStreak = get().user.streak;
-    const updated = recordActivity();
+    const userId = get().currentUserId;
+    const user = get().user;
+    const today = new Date().toISOString().slice(0, 10);
+    const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
 
-    // +100 Kristalle beim Erreichen eines 7-Tage Streaks
+    if (user.lastActiveDate === today) return;
+
+    const oldStreak = user.streak;
+    const updated: UserData = {
+      ...user,
+      streak: user.lastActiveDate === yesterday ? user.streak + 1 : 1,
+      lastActiveDate: today,
+    };
+
     const crystalGain = updated.streak === 7 && oldStreak < 7 ? 100 : 0;
     const withCrystals: UserData = crystalGain > 0
       ? { ...updated, crystals: (updated.crystals ?? 0) + crystalGain }
       : updated;
 
-    if (crystalGain > 0) saveUser(withCrystals);
     set((state) => ({
       user: withCrystals,
       pendingCrystalGain: state.pendingCrystalGain + crystalGain,
     }));
+    if (userId) saveUser(withCrystals, userId).catch(console.error);
     get().checkAndAwardBadges();
   },
 
   addStudiedCards: (count) => {
-    const updated = addCardsStudied(count);
+    const userId = get().currentUserId;
+    const user = get().user;
+    const updated: UserData = { ...user, totalCardsStudied: user.totalCardsStudied + count };
     set({ user: updated });
+    if (userId) saveUser(updated, userId).catch(console.error);
     get().checkAndAwardBadges();
   },
 
   // ── Fortschritt ─────────────────────────────────────────────────────────
 
   updateProgress: (progress) => {
-    saveProgress(progress);
+    const userId = get().currentUserId;
     set((state) => ({ progress: { ...state.progress, [progress.setId]: progress } }));
+    if (userId) saveProgress(progress, userId).catch(console.error);
   },
 
   getSetProgress: (setId) => {
@@ -210,6 +276,7 @@ export const useStore = create<AppState>((set, get) => ({
   // ── Badges ──────────────────────────────────────────────────────────────
 
   checkAndAwardBadges: () => {
+    const userId = get().currentUserId;
     const { sets, user, diaryEntries, habits, tasks, notes } = get();
     const newBadges: BadgeId[] = [];
 
@@ -262,7 +329,7 @@ export const useStore = create<AppState>((set, get) => ({
         earnedBadges: [...user.earnedBadges, ...newBadges],
         crystals: (user.crystals ?? 0) + crystalGain,
       };
-      saveUser(updatedUser);
+      if (userId) saveUser(updatedUser, userId).catch(console.error);
       set((state) => ({
         user: updatedUser,
         pendingBadges: [...state.pendingBadges, ...newBadges],
@@ -282,13 +349,25 @@ export const useStore = create<AppState>((set, get) => ({
 
   // Karten-Tracking
   recordCardResult: (setId, cardId, wasCorrect) => {
-    const updated = updateCardResult(setId, cardId, wasCorrect);
+    const userId = get().currentUserId;
+    if (!userId) return;
+    const existing = get().cardStats[setId]?.[cardId];
+    const updated: CardStats = existing
+      ? {
+          ...existing,
+          correct: existing.correct + (wasCorrect ? 1 : 0),
+          incorrect: existing.incorrect + (wasCorrect ? 0 : 1),
+          lastSeen: Date.now(),
+        }
+      : { cardId, setId, correct: wasCorrect ? 1 : 0, incorrect: wasCorrect ? 0 : 1, lastSeen: Date.now() };
+
     set((state) => ({
       cardStats: {
         ...state.cardStats,
         [setId]: { ...(state.cardStats[setId] ?? {}), [cardId]: updated },
       },
     }));
+    updateCardResult(setId, cardId, wasCorrect, userId, existing).catch(console.error);
   },
 
   getWeakCardIds: (setId) => {
@@ -300,17 +379,12 @@ export const useStore = create<AppState>((set, get) => ({
 
   // Tages-Herausforderung
   initDaily: () => {
+    const userId = get().currentUserId;
     const today = new Date().toISOString().slice(0, 10);
-    const { sets, daily: current } = get();
+    const { sets, daily: stored } = get();
     const hasCards = sets.some((s) => s.cards.length > 0);
 
-    if (current && current.date === today && (current.cards.length > 0 || !hasCards)) return;
-
-    const stored = getDailyChallenge();
-    if (stored && stored.date === today && (stored.cards.length > 0 || !hasCards)) {
-      set({ daily: stored });
-      return;
-    }
+    if (stored && stored.date === today && (stored.cards.length > 0 || !hasCards)) return;
 
     const allCards = sets.flatMap((s) =>
       s.cards.map((c) => ({ cardId: c.id, setId: s.id, setName: s.name, front: c.front, back: c.back }))
@@ -327,11 +401,13 @@ export const useStore = create<AppState>((set, get) => ({
       challengeStreak: carriedStreak,
       lastCompletedDate: stored?.lastCompletedDate ?? null,
     };
-    saveDailyChallenge(newDaily);
     set({ daily: newDaily });
+    if (userId) saveDailyChallenge(newDaily, userId).catch(console.error);
   },
 
   completeDaily: (score) => {
+    const userId = get().currentUserId;
+    if (!userId) return;
     const { daily, user } = get();
     if (!daily || daily.completed) return;
 
@@ -343,9 +419,7 @@ export const useStore = create<AppState>((set, get) => ({
       challengeStreak: daily.challengeStreak + 1,
       lastCompletedDate: today,
     };
-    saveDailyChallenge(updated);
 
-    // +20 Kristalle für abgeschlossene Daily Challenge — einmal pro Tag, gecappt
     const t = get().dailyCrystals;
     const crystalGain = (!t.dailyChallengeGranted && t.totalCapped < 300)
       ? Math.min(20, 300 - t.totalCapped)
@@ -354,18 +428,21 @@ export const useStore = create<AppState>((set, get) => ({
     const updatedUser: UserData = crystalGain > 0
       ? { ...user, crystals: (user.crystals ?? 0) + crystalGain }
       : user;
-    if (crystalGain > 0) saveUser(updatedUser);
-    saveDailyCrystalTracker(nt);
+
     set((state) => ({
       daily: updated,
       user: updatedUser,
       dailyCrystals: nt,
       pendingCrystalGain: state.pendingCrystalGain + crystalGain,
     }));
+    saveDailyChallenge(updated, userId).catch(console.error);
+    if (crystalGain > 0) saveUser(updatedUser, userId).catch(console.error);
+    saveDailyCrystalTracker(nt, userId).catch(console.error);
   },
 
   // Session-Badges + Crystal-Belohnungen
   finishSession: (mode, score) => {
+    const userId = get().currentUserId;
     const { user } = get();
     const toAward: BadgeId[] = [];
     let crystalGain = 0;
@@ -380,7 +457,7 @@ export const useStore = create<AppState>((set, get) => ({
       if (sessionBonus > 0) {
         crystalGain += sessionBonus;
         const nt: DailyCrystalTracker = { ...t, sessionCrystals: t.sessionCrystals + sessionBonus, totalCapped: t.totalCapped + sessionBonus };
-        saveDailyCrystalTracker(nt);
+        if (userId) saveDailyCrystalTracker(nt, userId).catch(console.error);
         set({ dailyCrystals: nt });
       }
     }
@@ -391,7 +468,7 @@ export const useStore = create<AppState>((set, get) => ({
         earnedBadges: [...user.earnedBadges, ...toAward],
         crystals: (user.crystals ?? 0) + crystalGain,
       };
-      saveUser(updatedUser);
+      if (userId) saveUser(updatedUser, userId).catch(console.error);
       set((state) => ({
         user: updatedUser,
         pendingBadges: toAward.length > 0 ? [...state.pendingBadges, ...toAward] : state.pendingBadges,
@@ -404,24 +481,25 @@ export const useStore = create<AppState>((set, get) => ({
 
   // XP & Level
   addXp: (amount) => {
+    const userId = get().currentUserId;
     const { user: oldUser } = get();
     const oldLevel = getLevelInfo(oldUser.xp ?? 0).level;
-    const { user: newUser } = addXpToUser(amount);
-    const newLevel = getLevelInfo(newUser.xp).level;
+    const newXp = (oldUser.xp ?? 0) + amount;
+    const newUser: UserData = { ...oldUser, xp: newXp };
+    const newLevel = getLevelInfo(newXp).level;
     const leveledUp = newLevel > oldLevel;
 
-    // +50 Kristalle bei Level-Up
     const crystalGain = leveledUp ? 50 : 0;
     const withCrystals: UserData = crystalGain > 0
       ? { ...newUser, crystals: (newUser.crystals ?? 0) + crystalGain }
       : newUser;
 
-    if (crystalGain > 0) saveUser(withCrystals);
     set((state) => ({
       user: withCrystals,
       pendingLevelUp: leveledUp ? newLevel : state.pendingLevelUp,
       pendingCrystalGain: state.pendingCrystalGain + crystalGain,
     }));
+    if (userId) saveUser(withCrystals, userId).catch(console.error);
   },
 
   dismissLevelUp: () => set({ pendingLevelUp: null }),
@@ -429,13 +507,14 @@ export const useStore = create<AppState>((set, get) => ({
   // ── Kristalle ────────────────────────────────────────────────────────────
 
   addCrystals: (amount) => {
+    const userId = get().currentUserId;
     const user = get().user;
     const updated: UserData = { ...user, crystals: (user.crystals ?? 0) + amount };
-    saveUser(updated);
     set((state) => ({
       user: updated,
       pendingCrystalGain: state.pendingCrystalGain + amount,
     }));
+    if (userId) saveUser(updated, userId).catch(console.error);
   },
 
   dismissCrystalGain: () => set({ pendingCrystalGain: 0 }),
@@ -443,11 +522,16 @@ export const useStore = create<AppState>((set, get) => ({
   // ── Tagebuch ─────────────────────────────────────────────────────────────
 
   saveDiary: (entry) => {
+    const userId = get().currentUserId;
+    if (!userId) return;
     const isNew = !get().diaryEntries.find((e) => e.id === entry.id);
-    saveDiaryEntry(entry);
-    set({ diaryEntries: getDiaryEntries() });
+    set((state) => ({
+      diaryEntries: isNew
+        ? [entry, ...state.diaryEntries]
+        : state.diaryEntries.map((e) => e.id === entry.id ? entry : e),
+    }));
+    saveDiaryEntry(entry, userId).catch(console.error);
 
-    // +10 Kristalle für neuen Eintrag — einmal pro Tag, gecappt
     if (isNew) {
       const today = new Date().toISOString().slice(0, 10);
       if (entry.date === today) {
@@ -457,8 +541,8 @@ export const useStore = create<AppState>((set, get) => ({
           const nt: DailyCrystalTracker = { ...t, diaryGranted: true, totalCapped: t.totalCapped + grant };
           const cu = get().user;
           const nu: UserData = { ...cu, crystals: (cu.crystals ?? 0) + grant };
-          saveUser(nu);
-          saveDailyCrystalTracker(nt);
+          saveUser(nu, userId).catch(console.error);
+          saveDailyCrystalTracker(nt, userId).catch(console.error);
           set((state) => ({ user: nu, dailyCrystals: nt, pendingCrystalGain: state.pendingCrystalGain + grant }));
         }
       }
@@ -467,34 +551,43 @@ export const useStore = create<AppState>((set, get) => ({
   },
 
   removeDiary: (id) => {
-    deleteDiaryEntry(id);
-    set({ diaryEntries: getDiaryEntries() });
+    const userId = get().currentUserId;
+    if (!userId) return;
+    set((state) => ({ diaryEntries: state.diaryEntries.filter((e) => e.id !== id) }));
+    deleteDiaryEntry(id).catch(console.error);
   },
 
   // ── Tasks ─────────────────────────────────────────────────────────────────
 
   addTask: (task) => {
-    saveTask(task);
-    set({ tasks: getTasks() });
+    const userId = get().currentUserId;
+    if (!userId) return;
+    set((state) => ({ tasks: [...state.tasks, task] }));
+    saveTask(task, userId).catch(console.error);
   },
 
   updateTask: (task) => {
-    saveTask(task);
-    set({ tasks: getTasks() });
+    const userId = get().currentUserId;
+    if (!userId) return;
+    set((state) => ({ tasks: state.tasks.map((t) => t.id === task.id ? task : t) }));
+    saveTask(task, userId).catch(console.error);
   },
 
   removeTask: (id) => {
-    deleteTask(id);
-    set({ tasks: getTasks() });
+    const userId = get().currentUserId;
+    if (!userId) return;
+    set((state) => ({ tasks: state.tasks.filter((t) => t.id !== id) }));
+    deleteTask(id).catch(console.error);
   },
 
   completeTask: (taskId, date) => {
+    const userId = get().currentUserId;
+    if (!userId) return;
     const task = get().tasks.find((t) => t.id === taskId);
     if (!task) return;
 
     let updated: Task;
     if (task.recurring) {
-      // Wiederkehrend: Datum in completedDates eintragen
       const alreadyDone = task.completedDates.includes(date);
       if (alreadyDone) {
         updated = { ...task, completedDates: task.completedDates.filter((d) => d !== date) };
@@ -505,15 +598,11 @@ export const useStore = create<AppState>((set, get) => ({
       updated = { ...task, completed: !task.completed };
     }
 
-    const wasCompleted = task.recurring
-      ? task.completedDates.includes(date)
-      : task.completed;
-    const isNowCompleted = task.recurring
-      ? updated.completedDates.includes(date)
-      : updated.completed;
+    const wasCompleted = task.recurring ? task.completedDates.includes(date) : task.completed;
+    const isNowCompleted = task.recurring ? updated.completedDates.includes(date) : updated.completed;
 
-    saveTask(updated);
-    set({ tasks: getTasks() });
+    set((state) => ({ tasks: state.tasks.map((t) => t.id === taskId ? updated : t) }));
+    saveTask(updated, userId).catch(console.error);
 
     if (isNowCompleted && !wasCompleted) {
       // +5 pro Task — gecappt: max 50/Tag, kein erneutes Vergeben
@@ -523,13 +612,13 @@ export const useStore = create<AppState>((set, get) => ({
         const nt: DailyCrystalTracker = { ...t, rewardedTaskIds: [...t.rewardedTaskIds, taskId], taskCrystals: t.taskCrystals + grant, totalCapped: t.totalCapped + grant };
         const cu = get().user;
         const nu: UserData = { ...cu, crystals: (cu.crystals ?? 0) + grant };
-        saveUser(nu);
-        saveDailyCrystalTracker(nt);
+        saveUser(nu, userId).catch(console.error);
+        saveDailyCrystalTracker(nt, userId).catch(console.error);
         set((state) => ({ user: nu, dailyCrystals: nt, pendingCrystalGain: state.pendingCrystalGain + grant }));
       }
 
       // Bonus +25 wenn alle Tasks des Tages erledigt
-      const allTasks = getTasks();
+      const allTasks = get().tasks;
       const todayTasks = allTasks.filter((t) => {
         if (t.recurring === 'täglich') return true;
         if (t.recurring === 'wöchentlich') {
@@ -539,25 +628,23 @@ export const useStore = create<AppState>((set, get) => ({
           const startStr = startOfWeek.toISOString().slice(0, 10);
           const doneThisWeek = t.completedDates.some((d) => d >= startStr && d <= date);
           const doneToday = t.completedDates.includes(date);
-          // Task gehört zu heute: noch nicht diese Woche erledigt, ODER genau heute erledigt
           return !doneThisWeek || doneToday;
         }
         return t.date === date;
       });
       const allDone = todayTasks.length > 0 && todayTasks.every((t) => {
         if (t.recurring) return t.completedDates.includes(date);
-        return t.id === taskId ? true : t.completed;
+        return t.completed;
       });
       if (allDone) {
-        // Perfekter-Tag-Bonus gecappt (zählt zum Task-Limit) — nur einmal pro Tag
         const t2 = get().dailyCrystals;
         if (!t2.allDoneBonusGranted && t2.taskCrystals < 50 && t2.totalCapped < 300) {
           const grant2 = Math.min(25, 50 - t2.taskCrystals, 300 - t2.totalCapped);
           const nt2: DailyCrystalTracker = { ...t2, allDoneBonusGranted: true, taskCrystals: t2.taskCrystals + grant2, totalCapped: t2.totalCapped + grant2 };
           const cu2 = get().user;
           const nu2: UserData = { ...cu2, crystals: (cu2.crystals ?? 0) + grant2 };
-          saveUser(nu2);
-          saveDailyCrystalTracker(nt2);
+          saveUser(nu2, userId).catch(console.error);
+          saveDailyCrystalTracker(nt2, userId).catch(console.error);
           set((state) => ({ user: nu2, dailyCrystals: nt2, pendingCrystalGain: state.pendingCrystalGain + grant2 }));
         }
         // task_perfect_day Badge
@@ -568,7 +655,7 @@ export const useStore = create<AppState>((set, get) => ({
             earnedBadges: [...u.earnedBadges, 'task_perfect_day'],
             crystals: (u.crystals ?? 0) + 30,
           };
-          saveUser(updatedUser);
+          saveUser(updatedUser, userId).catch(console.error);
           set((state) => ({
             user: updatedUser,
             pendingBadges: [...state.pendingBadges, 'task_perfect_day'],
@@ -583,22 +670,30 @@ export const useStore = create<AppState>((set, get) => ({
   // ── Gewohnheiten ──────────────────────────────────────────────────────────
 
   addHabit: (habit) => {
-    saveHabit(habit);
-    set({ habits: getHabits() });
+    const userId = get().currentUserId;
+    if (!userId) return;
+    set((state) => ({ habits: [...state.habits, habit] }));
+    saveHabit(habit, userId).catch(console.error);
     get().checkAndAwardBadges();
   },
 
   updateHabit: (habit) => {
-    saveHabit(habit);
-    set({ habits: getHabits() });
+    const userId = get().currentUserId;
+    if (!userId) return;
+    set((state) => ({ habits: state.habits.map((h) => h.id === habit.id ? habit : h) }));
+    saveHabit(habit, userId).catch(console.error);
   },
 
   removeHabit: (id) => {
-    deleteHabit(id);
-    set({ habits: getHabits() });
+    const userId = get().currentUserId;
+    if (!userId) return;
+    set((state) => ({ habits: state.habits.filter((h) => h.id !== id) }));
+    deleteHabit(id).catch(console.error);
   },
 
   checkInHabit: (habitId, date) => {
+    const userId = get().currentUserId;
+    if (!userId) return;
     const habit = get().habits.find((h) => h.id === habitId);
     if (!habit) return;
 
@@ -606,9 +701,7 @@ export const useStore = create<AppState>((set, get) => ({
 
     let updated: Habit;
     if (alreadyChecked) {
-      // Rückgängig machen — Streak neu berechnen
       const newCheckIns = habit.checkIns.filter((d) => d !== date);
-      // Streak = aufeinanderfolgende Tage bis zum letzten verbleibenden Check-In
       const sorted = [...newCheckIns].sort().reverse();
       let newStreak = 0;
       if (sorted.length > 0) {
@@ -622,12 +715,7 @@ export const useStore = create<AppState>((set, get) => ({
           }
         }
       }
-      updated = {
-        ...habit,
-        checkIns: newCheckIns,
-        streak: newStreak,
-        lastCheckedDate: sorted[0] ?? null,
-      };
+      updated = { ...habit, checkIns: newCheckIns, streak: newStreak, lastCheckedDate: sorted[0] ?? null };
     } else {
       const newCheckIns = [...habit.checkIns, date];
       const yesterday = new Date(new Date(date).getTime() - 86400000).toISOString().slice(0, 10);
@@ -637,10 +725,14 @@ export const useStore = create<AppState>((set, get) => ({
       updated = { ...habit, checkIns: newCheckIns, streak: newStreak, lastCheckedDate: date };
     }
 
-    saveHabit(updated);
-    set({ habits: getHabits() });
+    set((state) => ({ habits: state.habits.map((h) => h.id === habitId ? updated : h) }));
+    saveHabit(updated, userId).catch(console.error);
 
-    if (!alreadyChecked) {
+    if (alreadyChecked) {
+      removeHabitCheckin(habitId, date).catch(console.error);
+    } else {
+      addHabitCheckin(habitId, date, userId).catch(console.error);
+
       // +10 pro Habit pro Tag — gecappt, kein erneutes Vergeben nach Rückgängig+Abhaken
       const t = get().dailyCrystals;
       if (!t.rewardedHabitIds.includes(habitId) && t.totalCapped < 300) {
@@ -648,26 +740,23 @@ export const useStore = create<AppState>((set, get) => ({
         const nt: DailyCrystalTracker = { ...t, rewardedHabitIds: [...t.rewardedHabitIds, habitId], totalCapped: t.totalCapped + grant };
         const cu = get().user;
         const nu: UserData = { ...cu, crystals: (cu.crystals ?? 0) + grant };
-        saveUser(nu);
-        saveDailyCrystalTracker(nt);
+        saveUser(nu, userId).catch(console.error);
+        saveDailyCrystalTracker(nt, userId).catch(console.error);
         set((state) => ({ user: nu, dailyCrystals: nt, pendingCrystalGain: state.pendingCrystalGain + grant }));
       }
 
       // Bonus +20 wenn alle Habits an diesem Tag erledigt
-      const allHabits = getHabits();
-      const allDone = allHabits.length > 0 && allHabits.every((h) =>
-        h.id === habitId ? true : h.checkIns.includes(date)
-      );
+      const allHabits = get().habits;
+      const allDone = allHabits.length > 0 && allHabits.every((h) => h.checkIns.includes(date));
       if (allDone) {
-        // Allrounder-Bonus gecappt
         const t2 = get().dailyCrystals;
         if (t2.totalCapped < 300) {
           const grant2 = Math.min(20, 300 - t2.totalCapped);
           const nt2: DailyCrystalTracker = { ...t2, totalCapped: t2.totalCapped + grant2 };
           const cu2 = get().user;
           const nu2: UserData = { ...cu2, crystals: (cu2.crystals ?? 0) + grant2 };
-          saveUser(nu2);
-          saveDailyCrystalTracker(nt2);
+          saveUser(nu2, userId).catch(console.error);
+          saveDailyCrystalTracker(nt2, userId).catch(console.error);
           set((state) => ({ user: nu2, dailyCrystals: nt2, pendingCrystalGain: state.pendingCrystalGain + grant2 }));
         }
         // habit_allrounder Badge
@@ -678,7 +767,7 @@ export const useStore = create<AppState>((set, get) => ({
             earnedBadges: [...u.earnedBadges, 'habit_allrounder'],
             crystals: (u.crystals ?? 0) + 30,
           };
-          saveUser(updatedUser);
+          saveUser(updatedUser, userId).catch(console.error);
           set((state) => ({
             user: updatedUser,
             pendingBadges: [...state.pendingBadges, 'habit_allrounder'],
@@ -693,21 +782,27 @@ export const useStore = create<AppState>((set, get) => ({
   // ── Notizen ───────────────────────────────────────────────────────────────
 
   addNote: (note) => {
-    saveNote(note);
-    set({ notes: getNotes() });
+    const userId = get().currentUserId;
+    if (!userId) return;
+    set((state) => ({ notes: [note, ...state.notes] }));
+    saveNote(note, userId).catch(console.error);
     get().addCrystals(5);
     get().checkAndAwardBadges();
   },
 
   updateNote: (note) => {
-    saveNote(note);
-    set({ notes: getNotes() });
+    const userId = get().currentUserId;
+    if (!userId) return;
+    set((state) => ({ notes: state.notes.map((n) => n.id === note.id ? note : n) }));
+    saveNote(note, userId).catch(console.error);
     get().checkAndAwardBadges();
   },
 
   removeNote: (id) => {
-    deleteNote(id);
-    set({ notes: getNotes() });
+    const userId = get().currentUserId;
+    if (!userId) return;
+    set((state) => ({ notes: state.notes.filter((n) => n.id !== id) }));
+    deleteNote(id).catch(console.error);
   },
 }));
 

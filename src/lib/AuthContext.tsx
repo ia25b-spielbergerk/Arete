@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import type { Session, User } from '@supabase/supabase-js';
 import { supabase } from './supabase';
+import { useStore } from '../store';
 
 interface AuthContextValue {
   session: Session | null;
@@ -21,12 +22,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Aktuelle Session laden
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
+      const userId = data.session?.user?.id ?? null;
+      const store = useStore.getState();
+      store.setCurrentUser(userId);
+      if (userId) store.loadAllData();
       setLoading(false);
     });
 
     // Auth-Änderungen verfolgen (Login, Logout, Token-Refresh)
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
+      const userId = session?.user?.id ?? null;
+      const store = useStore.getState();
+      store.setCurrentUser(userId);
+      if (userId) store.loadAllData();
     });
 
     return () => subscription.unsubscribe();

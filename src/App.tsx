@@ -29,7 +29,6 @@ import SettingsPage from './pages/Settings';
 
 function AppRoutes() {
   const darkMode = useStore((s) => s.darkMode);
-  const setsLength = useStore((s) => s.sets.length);
   const [showOnboarding, setShowOnboarding] = useState(
     () => localStorage.getItem('lernapp_onboarded') === null
   );
@@ -38,16 +37,6 @@ function AppRoutes() {
     localStorage.setItem('lernapp_onboarded', 'true');
     setShowOnboarding(false);
   };
-
-  useEffect(() => {
-    const { loadSets, loadUser } = useStore.getState();
-    loadSets();
-    loadUser();
-  }, []);
-
-  useEffect(() => {
-    useStore.getState().initDaily();
-  }, [setsLength]);
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', darkMode);
