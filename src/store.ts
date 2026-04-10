@@ -52,6 +52,7 @@ function maxConsecutiveDays(dates: string[]): number {
 
 interface AppState {
   currentUserId: string | null;
+  isLoading: boolean;
   sets: CardSet[];
   user: UserData;
   progress: Record<string, SetProgress>;
@@ -136,6 +137,7 @@ const today0 = new Date().toISOString().slice(0, 10);
 
 export const useStore = create<AppState>((set, get) => ({
   currentUserId: null,
+  isLoading: false,
   sets: [],
   user: { ...DEFAULT_USER },
   progress: {},
@@ -177,6 +179,8 @@ export const useStore = create<AppState>((set, get) => ({
     console.log('[loadAllData] userId:', userId);
     if (!userId) return;
 
+    set({ isLoading: true });
+
     Promise.all([
       getSets(userId),
       getUser(userId),
@@ -191,9 +195,12 @@ export const useStore = create<AppState>((set, get) => ({
     ]).then(([sets, user, progressArr, cardStats, daily, diaryEntries, tasks, habits, notes, dailyCrystals]) => {
       console.log('[loadAllData] loaded — sets:', sets.length, 'tasks:', tasks.length, 'habits:', habits.length, 'notes:', notes.length, 'diary:', diaryEntries.length);
       const progress = Object.fromEntries(progressArr.map((p) => [p.setId, p]));
-      set({ sets, user, progress, cardStats, daily, diaryEntries, tasks, habits, notes, dailyCrystals });
+      set({ sets, user, progress, cardStats, daily, diaryEntries, tasks, habits, notes, dailyCrystals, isLoading: false });
       get().initDaily();
-    }).catch((err) => console.error('[loadAllData] Promise.all failed:', err));
+    }).catch((err) => {
+      console.error('[loadAllData] Promise.all failed:', err);
+      set({ isLoading: false });
+    });
   },
 
   // ── Sets ────────────────────────────────────────────────────────────────

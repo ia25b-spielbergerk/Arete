@@ -1,10 +1,12 @@
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../lib/AuthContext';
+import { useStore } from '../store';
 
 export default function AuthGuard({ children }: { children: React.ReactNode }) {
   const { session, loading } = useAuth();
+  const isLoading = useStore((s) => s.isLoading);
 
-  if (loading) {
+  if (loading || isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-[#0f1117] flex items-center justify-center">
         <div className="w-8 h-8 rounded-full border-2 border-[#7F77DD] border-t-transparent animate-spin" />
