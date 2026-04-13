@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Moon, Sun, Shuffle, BarChart2, Trash2, Settings,
-  Medal, RotateCcw, Info, ChevronRight, Download, Upload, AlertCircle, LogOut, User,
+  Medal, RotateCcw, Info, ChevronRight, Download, Upload, AlertCircle, LogOut,
 } from 'lucide-react';
 import Layout from '../components/Layout';
 import { useStore } from '../store';
