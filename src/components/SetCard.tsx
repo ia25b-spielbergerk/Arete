@@ -53,7 +53,7 @@ export default function SetCard({ set }: Props) {
   const bestScore = Math.max(progress?.bestQuizScore ?? 0, progress?.bestTestScore ?? 0);
 
   return (
-    <div className="bg-white dark:bg-[#1a1d27] border border-gray-200 dark:border-white/10 rounded-xl p-5 hover:border-[#7F77DD]/50 hover:shadow-md transition-all">
+    <div className="bg-card border app-border rounded-xl p-5 hover:border-[#7F77DD]/50 hover:shadow-md transition-all">
       <div className="flex items-start justify-between gap-2 mb-3">
         <div className="min-w-0">
           <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-base truncate">{set.name}</h3>
@@ -72,17 +72,17 @@ export default function SetCard({ set }: Props) {
           </button>
 
           {menuOpen && (
-            <div className="absolute right-0 top-full mt-1 w-40 bg-white dark:bg-[#1a1d26] border border-gray-200 dark:border-white/10 rounded-xl shadow-lg z-20 py-1 overflow-hidden">
+            <div className="absolute right-0 top-full mt-1 w-40 bg-white dark:bg-[#1a1d26] border app-border rounded-xl shadow-lg z-20 py-1 overflow-hidden">
               <Link
                 to={`/sets/${set.id}/edit`}
                 onClick={() => setMenuOpen(false)}
-                className="flex items-center gap-2.5 px-3 py-2 text-sm text-gray-700 dark:text-white/70 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                className="flex items-center gap-2.5 px-3 py-2 text-sm text-gray-700 dark:text-white/70 app-hover transition-colors cursor-pointer"
               >
                 <Pencil size={14} className="text-gray-400 dark:text-white/30" /> Bearbeiten
               </Link>
               <button
                 onClick={handleDuplicate}
-                className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-gray-700 dark:text-white/70 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-gray-700 dark:text-white/70 app-hover transition-colors cursor-pointer"
               >
                 <Copy size={14} className="text-gray-400 dark:text-white/30" /> Kopieren
               </button>

@@ -23,7 +23,7 @@ export default function BottomNav() {
   };
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-20 bg-white dark:bg-[#0c0e14] border-t border-gray-200 dark:border-white/10">
+    <nav className="fixed bottom-0 left-0 right-0 z-20 bg-card border-t app-border">
       <div className="max-w-4xl mx-auto flex items-stretch">
         {TABS.map(({ path, label, Icon, color }) => {
           const active = isActive(path);

@@ -63,7 +63,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
   const screen = SCREENS[step];
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-white dark:bg-[#0f1117]">
+    <div className="fixed inset-0 z-50 flex flex-col bg-page">
       {/* Header */}
       <div className="flex items-center justify-between px-6 pt-5 pb-2 min-h-[52px]">
         {step > 0 ? (
@@ -96,7 +96,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
             >
               <img src="/logo.svg" alt="Arete" className="h-16 w-auto" />
             </div>
-            <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4 tracking-tight">
+            <h1 className="text-4xl font-bold app-text mb-4 tracking-tight">
               Willkommen bei Arete
             </h1>
             <p className="text-gray-500 dark:text-gray-400 text-lg leading-relaxed">
@@ -117,7 +117,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
             </div>
 
             {/* Titel + Beschreibung */}
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
+            <h2 className="text-2xl font-bold app-text mb-3">
               {screen.title}
             </h2>
             <p className="text-gray-500 dark:text-gray-400 text-base leading-relaxed mb-6">

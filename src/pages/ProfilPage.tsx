@@ -66,7 +66,7 @@ export default function ProfilPage() {
           </button>
           <div className="flex items-center gap-2">
             <User size={20} style={{ color: '#7F77DD' }} />
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Mein Profil</h1>
+            <h1 className="text-2xl font-bold app-text">Mein Profil</h1>
           </div>
         </div>
 
@@ -95,7 +95,7 @@ export default function ProfilPage() {
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Dein Benutzername"
               maxLength={50}
-              className="w-full px-4 py-2.5 border border-gray-200 dark:border-white/10 rounded-xl bg-white dark:bg-[#1a1d27] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/25 focus:outline-none focus:border-[#7F77DD] dark:focus:border-[#7F77DD] transition-colors text-sm"
+              className="w-full px-4 py-2.5 border app-border rounded-xl bg-card app-text placeholder-gray-400 dark:placeholder-white/25 focus:outline-none focus:border-[#7F77DD] dark:focus:border-[#7F77DD] transition-colors text-sm"
             />
           </div>
 
@@ -104,7 +104,7 @@ export default function ProfilPage() {
             <label className="block text-sm font-medium text-gray-700 dark:text-white/70 mb-1.5">
               E-Mail-Adresse
             </label>
-            <div className="w-full px-4 py-2.5 border border-gray-100 dark:border-white/8 rounded-xl bg-gray-50 dark:bg-white/3 text-gray-400 dark:text-white/30 text-sm select-none">
+            <div className="w-full px-4 py-2.5 border app-border rounded-xl bg-gray-50 dark:bg-white/3 text-gray-400 dark:text-white/30 text-sm select-none">
               {user?.email ?? '—'}
             </div>
             <p className="text-xs text-gray-400 dark:text-white/25 mt-1">Die E-Mail-Adresse kann nicht geändert werden.</p>
@@ -122,7 +122,7 @@ export default function ProfilPage() {
               }}
               placeholder="Erzähl kurz etwas über dich…"
               rows={3}
-              className="w-full px-4 py-2.5 border border-gray-200 dark:border-white/10 rounded-xl bg-white dark:bg-[#1a1d27] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/25 focus:outline-none focus:border-[#7F77DD] dark:focus:border-[#7F77DD] transition-colors text-sm resize-none"
+              className="w-full px-4 py-2.5 border app-border rounded-xl bg-card app-text placeholder-gray-400 dark:placeholder-white/25 focus:outline-none focus:border-[#7F77DD] dark:focus:border-[#7F77DD] transition-colors text-sm resize-none"
             />
             <p className="text-xs text-gray-400 dark:text-white/25 mt-1 text-right">{bio.length}/150</p>
           </div>

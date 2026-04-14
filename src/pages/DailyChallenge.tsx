@@ -54,7 +54,7 @@ export default function DailyChallenge() {
       <Layout>
         <div className="max-w-md mx-auto text-center py-12">
           <div className="flex justify-center mb-4"><ScoreIcon size={52} style={{ color: scoreColor }} /></div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Heute erledigt!</h1>
+          <h1 className="text-2xl font-bold app-text mb-2">Heute erledigt!</h1>
           <p className="text-6xl font-bold mb-3" style={{ color: scoreColor }}>{daily.score}%</p>
           {daily.challengeStreak > 1 && (
             <div className="inline-flex items-center gap-2 rounded-full px-4 py-2 mb-4 border" style={{ background: 'rgba(239,159,39,0.09)', borderColor: 'rgba(239,159,39,0.22)' }}>
@@ -170,7 +170,7 @@ export default function DailyChallenge() {
         </div>
 
         {/* Karte */}
-        <div className="rounded-2xl p-6 mb-6 text-center border border-gray-100 dark:border-white/10 bg-white dark:bg-[#1a1d27]">
+        <div className="rounded-2xl p-6 mb-6 text-center border border-gray-100 dark:border-white/10 bg-card">
           <p className="text-xs text-gray-400 mb-1 uppercase tracking-wide">{card.setName}</p>
           <p className="text-2xl font-semibold text-gray-900 dark:text-gray-100">{card.front}</p>
         </div>

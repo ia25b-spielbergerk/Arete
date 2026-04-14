@@ -93,9 +93,9 @@ export default function LernenPage() {
   return (
     <Layout>
       {/* Kompakte Stats-Leiste */}
-      <div className={`flex items-center bg-white dark:bg-[#1a1d27] border border-gray-100 dark:border-white/8 rounded-xl px-4 py-2.5 gap-0 ${daily?.completed ? 'mb-2' : 'mb-4'}`}>
+      <div className={`flex items-center bg-card border app-border rounded-xl px-4 py-2.5 gap-0 ${daily?.completed ? 'mb-2' : 'mb-4'}`}>
         {/* Streak — Orange */}
-        <div className="flex items-center gap-1.5 pr-4 border-r border-gray-200 dark:border-white/10">
+        <div className="flex items-center gap-1.5 pr-4 border-r app-border">
           <Flame size={15} style={{ color: activeToday ? '#EF9F27' : undefined }} className={!activeToday ? 'text-gray-300 dark:text-white/20' : ''} />
           <span className="text-sm font-semibold" style={{ color: activeToday ? '#EF9F27' : undefined }}>
             {user.streak}
@@ -104,7 +104,7 @@ export default function LernenPage() {
         </div>
 
         {/* XP / Level — Violett */}
-        <div className="flex items-center gap-2 px-4 border-r border-gray-200 dark:border-white/10 flex-1 min-w-0">
+        <div className="flex items-center gap-2 px-4 border-r app-border flex-1 min-w-0">
           <span className="text-xs font-semibold whitespace-nowrap" style={{ color: '#7F77DD' }}>
             Lvl {levelInfo.level}
           </span>

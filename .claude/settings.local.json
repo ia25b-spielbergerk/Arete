@@ -34,7 +34,8 @@
       "mcp__claude_ai_Supabase__execute_sql",
       "Bash(echo \"EXIT:$?\")",
       "Bash(npm uninstall:*)",
-      "Bash(powershell:*)"
+      "Bash(powershell:*)",
+      "Bash(grep -o 'prefers-color-scheme.*dark' dist/assets/*.css)"
     ]
   }
 }

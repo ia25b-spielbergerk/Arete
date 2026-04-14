@@ -23,7 +23,7 @@ export default function BadgesPage() {
       <div className="max-w-2xl mx-auto">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Badges</h1>
+            <h1 className="text-2xl font-bold app-text">Badges</h1>
             <p className="text-sm text-gray-400 dark:text-white/40 mt-1">
               {earned.length} von {BADGES.length} freigeschaltet
             </p>
@@ -75,7 +75,7 @@ export default function BadgesPage() {
                 return (
                   <div
                     key={badge.id}
-                    className="flex flex-col items-center text-center bg-white dark:bg-[#1a1d27] border border-gray-100 dark:border-white/8 rounded-xl p-4"
+                    className="flex flex-col items-center text-center bg-card border app-border rounded-xl p-4"
                   >
                     <Icon size={36} className="mb-2 text-gray-300 dark:text-white/20" />
                     <p className="text-sm font-semibold text-gray-500 dark:text-white/40">{badge.name}</p>

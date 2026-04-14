@@ -186,7 +186,7 @@ export default function Flashcards() {
           >
             {/* Vorderseite */}
             <div
-              className="absolute inset-0 rounded-2xl shadow-sm border-2 border-gray-100 dark:border-white/10 bg-white dark:bg-[#1a1d27]"
+              className="absolute inset-0 rounded-2xl shadow-sm border-2 border-gray-100 dark:border-white/10 bg-card"
               style={{ backfaceVisibility: 'hidden' }}
             >
               <div className="absolute inset-0 flex flex-col items-center justify-center p-8">

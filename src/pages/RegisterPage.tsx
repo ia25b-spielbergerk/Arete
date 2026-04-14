@@ -34,12 +34,12 @@ export default function RegisterPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-white dark:bg-[#0f1117] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-page flex items-center justify-center p-4">
         <div className="w-full max-w-sm text-center">
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl mb-4" style={{ backgroundColor: 'rgba(29,158,117,0.12)' }}>
             <Check size={28} style={{ color: '#1D9E75' }} />
           </div>
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Registrierung erfolgreich!</h2>
+          <h2 className="text-xl font-bold app-text mb-2">Registrierung erfolgreich!</h2>
           <p className="text-sm text-gray-400 dark:text-white/40 mb-6">
             Wir haben dir eine Bestätigungs-E-Mail an <strong className="text-gray-700 dark:text-white/70">{email}</strong> geschickt. Bitte bestätige deine E-Mail-Adresse und melde dich dann an.
           </p>
@@ -56,7 +56,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-[#0f1117] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-page flex items-center justify-center p-4">
       <div className="w-full max-w-sm">
 
         {/* Logo */}
@@ -64,7 +64,7 @@ export default function RegisterPage() {
           <div className="inline-flex items-center justify-center rounded-2xl mb-4 p-4" style={{ backgroundColor: '#0f1117' }}>
             <img src="/logo.svg" alt="Arete" className="h-12 w-auto" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Konto erstellen</h1>
+          <h1 className="text-2xl font-bold app-text">Konto erstellen</h1>
           <p className="text-sm text-gray-400 dark:text-white/40 mt-1">Starte deine Lernreise</p>
         </div>
 
@@ -84,7 +84,7 @@ export default function RegisterPage() {
                 placeholder="Dein Benutzername"
                 required
                 autoComplete="username"
-                className="w-full pl-9 pr-4 py-2.5 border border-gray-200 dark:border-white/10 rounded-xl bg-white dark:bg-[#1a1d27] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/25 focus:outline-none focus:border-[#7F77DD] dark:focus:border-[#7F77DD] transition-colors text-sm"
+                className="w-full pl-9 pr-4 py-2.5 border app-border rounded-xl bg-card app-text placeholder-gray-400 dark:placeholder-white/25 focus:outline-none focus:border-[#7F77DD] dark:focus:border-[#7F77DD] transition-colors text-sm"
               />
             </div>
           </div>
@@ -102,7 +102,7 @@ export default function RegisterPage() {
                 placeholder="name@beispiel.de"
                 required
                 autoComplete="email"
-                className="w-full pl-9 pr-4 py-2.5 border border-gray-200 dark:border-white/10 rounded-xl bg-white dark:bg-[#1a1d27] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/25 focus:outline-none focus:border-[#7F77DD] dark:focus:border-[#7F77DD] transition-colors text-sm"
+                className="w-full pl-9 pr-4 py-2.5 border app-border rounded-xl bg-card app-text placeholder-gray-400 dark:placeholder-white/25 focus:outline-none focus:border-[#7F77DD] dark:focus:border-[#7F77DD] transition-colors text-sm"
               />
             </div>
           </div>
@@ -120,7 +120,7 @@ export default function RegisterPage() {
                 placeholder="Passwort wählen"
                 required
                 autoComplete="new-password"
-                className="w-full pl-9 pr-4 py-2.5 border border-gray-200 dark:border-white/10 rounded-xl bg-white dark:bg-[#1a1d27] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/25 focus:outline-none focus:border-[#7F77DD] dark:focus:border-[#7F77DD] transition-colors text-sm"
+                className="w-full pl-9 pr-4 py-2.5 border app-border rounded-xl bg-card app-text placeholder-gray-400 dark:placeholder-white/25 focus:outline-none focus:border-[#7F77DD] dark:focus:border-[#7F77DD] transition-colors text-sm"
               />
             </div>
           </div>
@@ -138,10 +138,10 @@ export default function RegisterPage() {
                 placeholder="Passwort wiederholen"
                 required
                 autoComplete="new-password"
-                className={`w-full pl-9 pr-4 py-2.5 border rounded-xl bg-white dark:bg-[#1a1d27] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/25 focus:outline-none transition-colors text-sm ${
+                className={`w-full pl-9 pr-4 py-2.5 border rounded-xl bg-card app-text placeholder-gray-400 dark:placeholder-white/25 focus:outline-none transition-colors text-sm ${
                   confirm && !passwordsMatch
                     ? 'border-[#E24B4A] focus:border-[#E24B4A]'
-                    : 'border-gray-200 dark:border-white/10 focus:border-[#7F77DD] dark:focus:border-[#7F77DD]'
+                    : 'app-border focus:border-[#7F77DD] dark:focus:border-[#7F77DD]'
                 }`}
               />
             </div>

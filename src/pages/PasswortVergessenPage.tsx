@@ -26,7 +26,7 @@ export default function PasswortVergessenPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-[#0f1117] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-page flex items-center justify-center p-4">
       <div className="w-full max-w-sm">
 
         {/* Logo */}
@@ -34,7 +34,7 @@ export default function PasswortVergessenPage() {
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl mb-4" style={{ backgroundColor: 'rgba(127,119,221,0.12)' }}>
             <BookOpen size={28} style={{ color: '#7F77DD' }} />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Passwort zurücksetzen</h1>
+          <h1 className="text-2xl font-bold app-text">Passwort zurücksetzen</h1>
           <p className="text-sm text-gray-400 dark:text-white/40 mt-1">
             Wir schicken dir einen Reset-Link per E-Mail
           </p>
@@ -50,7 +50,7 @@ export default function PasswortVergessenPage() {
             </p>
             <Link
               to="/login"
-              className="flex items-center justify-center gap-2 w-full text-sm font-medium py-2.5 rounded-xl border border-gray-200 dark:border-white/10 text-gray-600 dark:text-white/60 hover:border-[#7F77DD] transition-colors"
+              className="flex items-center justify-center gap-2 w-full text-sm font-medium py-2.5 rounded-xl border app-border text-gray-600 dark:text-white/60 hover:border-[#7F77DD] transition-colors"
             >
               <ArrowLeft size={15} />
               Zurück zum Login
@@ -72,7 +72,7 @@ export default function PasswortVergessenPage() {
                   required
                   autoFocus
                   autoComplete="email"
-                  className="w-full pl-9 pr-4 py-2.5 border border-gray-200 dark:border-white/10 rounded-xl bg-white dark:bg-[#1a1d27] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/25 focus:outline-none focus:border-[#7F77DD] dark:focus:border-[#7F77DD] transition-colors text-sm"
+                  className="w-full pl-9 pr-4 py-2.5 border app-border rounded-xl bg-card app-text placeholder-gray-400 dark:placeholder-white/25 focus:outline-none focus:border-[#7F77DD] dark:focus:border-[#7F77DD] transition-colors text-sm"
                 />
               </div>
             </div>

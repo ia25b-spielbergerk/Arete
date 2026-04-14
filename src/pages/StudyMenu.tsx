@@ -58,7 +58,7 @@ export default function StudyMenu() {
         </Link>
 
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{set.name}</h1>
+          <h1 className="text-2xl font-bold app-text">{set.name}</h1>
           <p className="text-gray-400 dark:text-white/40 text-sm mt-1">
             {set.language1} → {set.language2} · {set.cards.length} Karten
           </p>
@@ -106,7 +106,7 @@ export default function StudyMenu() {
         {/* Beide Richtungen Toggle — Violett */}
         <button
           onClick={toggleMixed}
-          className="w-full flex items-center justify-between px-4 py-3 rounded-xl border mb-5 transition-all text-left bg-white dark:bg-[#1a1d27]"
+          className="w-full flex items-center justify-between px-4 py-3 rounded-xl border mb-5 transition-all text-left bg-card"
           style={mixed
             ? { borderColor: 'rgba(127,119,221,0.35)', background: 'rgba(127,119,221,0.07)' }
             : { borderColor: undefined }
@@ -116,7 +116,7 @@ export default function StudyMenu() {
             <Shuffle size={18} style={{ color: mixed ? '#7F77DD' : undefined }} className={!mixed ? 'text-gray-400 dark:text-white/30' : ''} />
             <div>
               <p className="text-sm font-semibold" style={mixed ? { color: '#7F77DD' } : undefined}>
-                {!mixed && <span className="text-gray-900 dark:text-white">Beide Richtungen</span>}
+                {!mixed && <span className="app-text">Beide Richtungen</span>}
                 {mixed && 'Beide Richtungen'}
               </p>
               <p className="text-xs text-gray-400 dark:text-white/30 mt-0.5">
@@ -147,15 +147,15 @@ export default function StudyMenu() {
                 key={mode.key}
                 onClick={() => !disabled && navigate(`/sets/${id}/${mode.key}`, { state: { mixed } })}
                 disabled={disabled}
-                className={`w-full flex items-center gap-4 p-4 rounded-xl border text-left transition-all bg-white dark:bg-[#1a1d27] ${
+                className={`w-full flex items-center gap-4 p-4 rounded-xl border text-left transition-all bg-card ${
                   disabled
-                    ? 'border-gray-100 dark:border-white/8 opacity-50 cursor-not-allowed'
-                    : 'border-gray-200 dark:border-white/10 hover:border-[#7F77DD]/40 hover:shadow-sm cursor-pointer'
+                    ? 'app-border opacity-50 cursor-not-allowed'
+                    : 'app-border hover:border-[#7F77DD]/40 hover:shadow-sm cursor-pointer'
                 }`}
               >
                 <mode.icon size={24} className="shrink-0" style={{ color: '#7F77DD' }} />
                 <div className="flex-1">
-                  <p className="font-semibold text-gray-900 dark:text-white text-sm">{mode.title}</p>
+                  <p className="font-semibold app-text text-sm">{mode.title}</p>
                   <p className="text-xs text-gray-400 dark:text-white/40 mt-0.5">{mode.description}</p>
                   {disabled && (
                     <p className="text-xs mt-0.5" style={{ color: '#E24B4A' }}>

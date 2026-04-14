@@ -64,8 +64,8 @@ export default function Results() {
 
         {/* Statistik */}
         <div className="grid grid-cols-3 gap-4 mb-8">
-          <div className="text-center bg-white dark:bg-[#1a1d27] border border-gray-100 dark:border-white/8 rounded-xl p-4">
-            <p className="text-2xl font-bold text-gray-900 dark:text-white">{state.answers.length}</p>
+          <div className="text-center bg-card border app-border rounded-xl p-4">
+            <p className="text-2xl font-bold app-text">{state.answers.length}</p>
             <p className="text-xs text-gray-400 dark:text-white/40 mt-1">Fragen</p>
           </div>
           <div className="text-center rounded-xl p-4 border" style={{ background: 'rgba(29,158,117,0.09)', borderColor: 'rgba(29,158,117,0.22)' }}>
@@ -104,7 +104,7 @@ export default function Results() {
         <div className="flex gap-3">
           <button
             onClick={() => navigate(`/sets/${state.setId}/${state.mode}`)}
-            className="flex-1 border border-gray-200 dark:border-white/10 text-gray-600 dark:text-white/60 hover:bg-gray-100 dark:hover:bg-white/5 font-medium py-2.5 rounded-lg transition-colors text-sm cursor-pointer"
+            className="flex-1 border app-border text-gray-600 dark:text-white/60 app-hover font-medium py-2.5 rounded-lg transition-colors text-sm cursor-pointer"
           >
             Nochmal
           </button>

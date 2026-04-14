@@ -44,7 +44,7 @@ function SectionCard({ children, title, icon: Icon, color }: {
   color: string;
 }) {
   return (
-    <div className="bg-white dark:bg-[#1a1d27] border border-gray-100 dark:border-white/8 rounded-2xl p-5 mb-4">
+    <div className="bg-card border app-border rounded-2xl p-5 mb-4">
       <div className="flex items-center gap-2 mb-4">
         <Icon size={15} style={{ color }} />
         <h2 className="text-xs font-semibold text-gray-500 dark:text-white/40 uppercase tracking-wider">{title}</h2>
@@ -184,7 +184,7 @@ export default function StatsContent() {
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2">
             <BarChart2 size={20} style={{ color: '#7F77DD' }} />
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Statistiken</h1>
+            <h1 className="text-2xl font-bold app-text">Statistiken</h1>
           </div>
           <div className="flex bg-gray-100 dark:bg-white/10 rounded-lg p-0.5">
             {(['7', '30'] as Period[]).map((p) => (
@@ -193,7 +193,7 @@ export default function StatsContent() {
                 onClick={() => setPeriod(p)}
                 className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors cursor-pointer ${
                   period === p
-                    ? 'bg-white dark:bg-white/15 text-gray-900 dark:text-white shadow-sm'
+                    ? 'bg-white dark:bg-white/15 app-text shadow-sm'
                     : 'text-gray-500 dark:text-white/40'
                 }`}
               >
@@ -208,13 +208,13 @@ export default function StatsContent() {
           {overviewStats.map(({ label, value, color, icon: Icon }) => (
             <div
               key={label}
-              className="bg-white dark:bg-[#1a1d27] border border-gray-100 dark:border-white/8 rounded-2xl p-4"
+              className="bg-card border app-border rounded-2xl p-4"
             >
               <div className="flex items-center gap-1.5 mb-2">
                 <Icon size={13} style={{ color }} />
                 <p className="text-xs text-gray-400 dark:text-white/40 leading-tight">{label}</p>
               </div>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{value}</p>
+              <p className="text-2xl font-bold app-text">{value}</p>
             </div>
           ))}
         </div>
@@ -379,7 +379,7 @@ export default function StatsContent() {
               </div>
 
               {bestHabit && (
-                <div className="pt-3 border-t border-gray-100 dark:border-white/8">
+                <div className="pt-3 border-t app-border">
                   <p className="text-xs text-gray-400 dark:text-white/40">
                     Konstanteste Gewohnheit:{' '}
                     <span className="font-semibold" style={{ color: '#EF9F27' }}>{bestHabit.name}</span>

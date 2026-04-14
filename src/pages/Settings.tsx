@@ -110,7 +110,7 @@ export default function SettingsPage() {
       <div className="max-w-lg mx-auto">
         <div className="flex items-center gap-2 mb-8">
           <Settings size={20} style={{ color: '#7F77DD' }} />
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Einstellungen</h1>
+          <h1 className="text-2xl font-bold app-text">Einstellungen</h1>
         </div>
 
         {/* Darstellung */}
@@ -118,10 +118,10 @@ export default function SettingsPage() {
           <h2 className="text-xs font-semibold text-gray-400 dark:text-white/30 uppercase tracking-wider mb-3">
             Darstellung
           </h2>
-          <div className="bg-white dark:bg-[#1a1d27] border border-gray-200 dark:border-white/10 rounded-xl overflow-hidden">
+          <div className="bg-card border app-border rounded-xl overflow-hidden">
             <button
               onClick={toggleDarkMode}
-              className="w-full flex items-center justify-between px-4 py-3.5 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer"
+              className="w-full flex items-center justify-between px-4 py-3.5 app-hover transition-colors cursor-pointer"
               aria-pressed={darkMode}
             >
               <div className="flex items-center gap-3">
@@ -130,7 +130,7 @@ export default function SettingsPage() {
                   : <Sun size={18} className="text-amber-400" />
                 }
                 <div className="text-left">
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">Dark Mode</p>
+                  <p className="text-sm font-medium app-text">Dark Mode</p>
                   <p className="text-xs text-gray-400 dark:text-white/40 mt-0.5">
                     {darkMode ? 'Dunkles Design aktiv' : 'Helles Design aktiv'}
                   </p>
@@ -157,10 +157,10 @@ export default function SettingsPage() {
           <h2 className="text-xs font-semibold text-gray-400 dark:text-white/30 uppercase tracking-wider mb-3">
             Lernen
           </h2>
-          <div className="bg-white dark:bg-[#1a1d27] border border-gray-200 dark:border-white/10 rounded-xl overflow-hidden">
+          <div className="bg-card border app-border rounded-xl overflow-hidden">
             <button
               onClick={toggleMixed}
-              className="w-full flex items-center justify-between px-4 py-3.5 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer"
+              className="w-full flex items-center justify-between px-4 py-3.5 app-hover transition-colors cursor-pointer"
               aria-pressed={mixed}
             >
               <div className="flex items-center gap-3">
@@ -170,7 +170,7 @@ export default function SettingsPage() {
                   className={!mixed ? 'text-gray-400 dark:text-white/30' : ''}
                 />
                 <div className="text-left">
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">Beide Richtungen</p>
+                  <p className="text-sm font-medium app-text">Beide Richtungen</p>
                   <p className="text-xs text-gray-400 dark:text-white/40 mt-0.5">
                     Karten in beiden Sprachen gemischt abfragen
                   </p>
@@ -197,15 +197,15 @@ export default function SettingsPage() {
           <h2 className="text-xs font-semibold text-gray-400 dark:text-white/30 uppercase tracking-wider mb-3">
             Fortschritt
           </h2>
-          <div className="bg-white dark:bg-[#1a1d27] border border-gray-200 dark:border-white/10 rounded-xl overflow-hidden">
+          <div className="bg-card border app-border rounded-xl overflow-hidden">
             <button
               onClick={() => navigate('/badges')}
-              className="w-full flex items-center justify-between px-4 py-3.5 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer"
+              className="w-full flex items-center justify-between px-4 py-3.5 app-hover transition-colors cursor-pointer"
             >
               <div className="flex items-center gap-3">
                 <Medal size={18} style={{ color: '#7F77DD' }} />
                 <div className="text-left">
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">Badges</p>
+                  <p className="text-sm font-medium app-text">Badges</p>
                   <p className="text-xs text-gray-400 dark:text-white/40 mt-0.5">
                     Errungenschaften und Fortschritt ansehen
                   </p>
@@ -221,16 +221,16 @@ export default function SettingsPage() {
           <h2 className="text-xs font-semibold text-gray-400 dark:text-white/30 uppercase tracking-wider mb-3">
             App
           </h2>
-          <div className="bg-white dark:bg-[#1a1d27] border border-gray-200 dark:border-white/10 rounded-xl overflow-hidden divide-y divide-gray-100 dark:divide-white/8">
+          <div className="bg-card border app-border rounded-xl overflow-hidden divide-y app-divide">
 
             {/* Onboarding erneut */}
             <button
               onClick={handleResetOnboarding}
-              className="w-full flex items-center gap-3 px-4 py-3.5 text-left hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer"
+              className="w-full flex items-center gap-3 px-4 py-3.5 text-left app-hover transition-colors cursor-pointer"
             >
               <RotateCcw size={18} style={{ color: '#7F77DD' }} className="shrink-0" />
               <div>
-                <p className="text-sm font-medium text-gray-900 dark:text-white">
+                <p className="text-sm font-medium app-text">
                   Einführung erneut anzeigen
                 </p>
                 <p className="text-xs text-gray-400 dark:text-white/40 mt-0.5">
@@ -242,11 +242,11 @@ export default function SettingsPage() {
             {/* Statistiken zurücksetzen */}
             <button
               onClick={handleResetStats}
-              className="w-full flex items-center gap-3 px-4 py-3.5 text-left hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer"
+              className="w-full flex items-center gap-3 px-4 py-3.5 text-left app-hover transition-colors cursor-pointer"
             >
               <BarChart2 size={18} style={{ color: '#EF9F27' }} className="shrink-0" />
               <div>
-                <p className="text-sm font-medium text-gray-900 dark:text-white">
+                <p className="text-sm font-medium app-text">
                   Lernstatistiken zurücksetzen
                 </p>
                 <p className="text-xs text-gray-400 dark:text-white/40 mt-0.5">
@@ -284,7 +284,7 @@ export default function SettingsPage() {
                   <div className="flex gap-2">
                     <button
                       onClick={() => setConfirmReset(false)}
-                      className="flex-1 border border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-400 text-sm font-medium py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                      className="flex-1 border app-border text-gray-600 dark:text-gray-400 text-sm font-medium py-2 rounded-lg app-hover transition-colors cursor-pointer"
                     >
                       Abbrechen
                     </button>
@@ -307,16 +307,16 @@ export default function SettingsPage() {
           <h2 className="text-xs font-semibold text-gray-400 dark:text-white/30 uppercase tracking-wider mb-3">
             Daten
           </h2>
-          <div className="bg-white dark:bg-[#1a1d27] border border-gray-200 dark:border-white/10 rounded-xl overflow-hidden divide-y divide-gray-100 dark:divide-white/8">
+          <div className="bg-card border app-border rounded-xl overflow-hidden divide-y app-divide">
 
             {/* Export */}
             <button
               onClick={handleExport}
-              className="w-full flex items-center gap-3 px-4 py-3.5 text-left hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer"
+              className="w-full flex items-center gap-3 px-4 py-3.5 text-left app-hover transition-colors cursor-pointer"
             >
               <Download size={18} style={{ color: '#7F77DD' }} className="shrink-0" />
               <div>
-                <p className="text-sm font-medium text-gray-900 dark:text-white">Daten exportieren</p>
+                <p className="text-sm font-medium app-text">Daten exportieren</p>
                 <p className="text-xs text-gray-400 dark:text-white/40 mt-0.5">
                   Alle Daten als JSON-Datei herunterladen
                 </p>
@@ -335,11 +335,11 @@ export default function SettingsPage() {
               {!confirmImport ? (
                 <button
                   onClick={() => fileInputRef.current?.click()}
-                  className="w-full flex items-center gap-3 px-4 py-3.5 text-left hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                  className="w-full flex items-center gap-3 px-4 py-3.5 text-left app-hover transition-colors cursor-pointer"
                 >
                   <Upload size={18} style={{ color: '#7F77DD' }} className="shrink-0" />
                   <div>
-                    <p className="text-sm font-medium text-gray-900 dark:text-white">Daten importieren</p>
+                    <p className="text-sm font-medium app-text">Daten importieren</p>
                     <p className="text-xs text-gray-400 dark:text-white/40 mt-0.5">
                       Backup-Datei einlesen und Daten wiederherstellen
                     </p>
@@ -356,7 +356,7 @@ export default function SettingsPage() {
                   <div className="flex gap-2">
                     <button
                       onClick={() => { setConfirmImport(false); setImportData(null); }}
-                      className="flex-1 border border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-400 text-sm font-medium py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                      className="flex-1 border app-border text-gray-600 dark:text-gray-400 text-sm font-medium py-2 rounded-lg app-hover transition-colors cursor-pointer"
                     >
                       Abbrechen
                     </button>
@@ -379,12 +379,12 @@ export default function SettingsPage() {
           <h2 className="text-xs font-semibold text-gray-400 dark:text-white/30 uppercase tracking-wider mb-3">
             Konto
           </h2>
-          <div className="bg-white dark:bg-[#1a1d27] border border-gray-200 dark:border-white/10 rounded-xl overflow-hidden divide-y divide-gray-100 dark:divide-white/8">
+          <div className="bg-card border app-border rounded-xl overflow-hidden divide-y app-divide">
 
             {/* Profil-Link */}
             <button
               onClick={() => navigate('/profil')}
-              className="w-full flex items-center justify-between px-4 py-3.5 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors cursor-pointer"
+              className="w-full flex items-center justify-between px-4 py-3.5 app-hover transition-colors cursor-pointer"
             >
               <div className="flex items-center gap-3">
                 <div
@@ -394,7 +394,7 @@ export default function SettingsPage() {
                   {profile?.username ? getInitials(profile.username) || '?' : '?'}
                 </div>
                 <div className="text-left">
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">
+                  <p className="text-sm font-medium app-text">
                     {profile?.username ?? user?.email ?? '—'}
                   </p>
                   <p className="text-xs text-gray-400 dark:text-white/30 mt-0.5">Profil bearbeiten</p>

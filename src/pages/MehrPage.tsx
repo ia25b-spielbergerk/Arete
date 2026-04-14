@@ -19,7 +19,7 @@ export default function MehrPage() {
           onClick={() => setTab('statistik')}
           className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
             tab === 'statistik'
-              ? 'bg-white dark:bg-white/15 text-gray-900 dark:text-white shadow-sm'
+              ? 'bg-white dark:bg-white/15 app-text shadow-sm'
               : 'text-gray-500 dark:text-white/40'
           }`}
         >
@@ -30,7 +30,7 @@ export default function MehrPage() {
           onClick={() => setTab('shop')}
           className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
             tab === 'shop'
-              ? 'bg-white dark:bg-white/15 text-gray-900 dark:text-white shadow-sm'
+              ? 'bg-white dark:bg-white/15 app-text shadow-sm'
               : 'text-gray-500 dark:text-white/40'
           }`}
         >
@@ -46,7 +46,7 @@ export default function MehrPage() {
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-2">
               <ShoppingBag size={20} style={{ color: '#378ADD' }} />
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Shop</h1>
+              <h1 className="text-2xl font-bold app-text">Shop</h1>
             </div>
             <div
               className="flex items-center gap-2 rounded-xl px-4 py-2 border"
@@ -101,7 +101,7 @@ export default function MehrPage() {
             >
               <ShoppingBag size={40} style={{ color: '#378ADD' }} />
             </div>
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Bald verfügbar</h2>
+            <h2 className="text-xl font-bold app-text mb-3">Bald verfügbar</h2>
             <p className="text-gray-400 dark:text-white/40 text-sm leading-relaxed max-w-xs">
               Hier kannst du bald mit Kristallen Belohnungen freischalten.
             </p>

@@ -162,7 +162,7 @@ export default function Dashboard() {
       {/* Datum + Wetter + Einstellungen */}
       <div className="flex items-start justify-between mb-5">
         <div>
-          <p className="text-2xl font-bold text-gray-900 dark:text-white">
+          <p className="text-2xl font-bold app-text">
             {WEEKDAYS[now.getDay()]}, {now.getDate()}. {MONTHS[now.getMonth()]}
           </p>
           <p className="text-sm text-gray-400 dark:text-white/40 mt-0.5">
@@ -198,7 +198,7 @@ export default function Dashboard() {
           <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: '#7F77DD' }}>
             Erste Schritte
           </p>
-          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-1">
+          <h2 className="text-lg font-bold app-text mb-1">
             Bereit loszulegen?
           </h2>
           <p className="text-sm text-gray-500 dark:text-white/40 mb-4 leading-relaxed">
@@ -338,7 +338,7 @@ export default function Dashboard() {
             Alle <ChevronRight size={13} />
           </Link>
         </div>
-        <div className="bg-white dark:bg-[#1a1d27] border border-gray-100 dark:border-white/8 rounded-xl overflow-hidden">
+        <div className="bg-card border app-border rounded-xl overflow-hidden">
           {previewTasks.length === 0 ? (
             <p className="text-xs text-gray-400 dark:text-white/30 px-4 py-3 text-center">
               {todayTasks.filter(isTaskDone).length === todayTasks.length && todayTasks.length > 0
@@ -350,8 +350,8 @@ export default function Dashboard() {
               <button
                 key={task.id}
                 onClick={() => completeTask(task.id, today)}
-                className={`w-full flex items-center gap-3 px-4 py-2.5 text-left hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer ${
-                  i < previewTasks.length - 1 ? 'border-b border-gray-100 dark:border-white/8' : ''
+                className={`w-full flex items-center gap-3 px-4 py-2.5 text-left app-hover transition-colors cursor-pointer ${
+                  i < previewTasks.length - 1 ? 'border-b app-border' : ''
                 }`}
               >
                 <div className="w-4 h-4 rounded-full border-2 border-gray-300 dark:border-white/20 shrink-0" />
@@ -371,7 +371,7 @@ export default function Dashboard() {
             Alle <ChevronRight size={13} />
           </Link>
         </div>
-        <div className="bg-white dark:bg-[#1a1d27] border border-gray-100 dark:border-white/8 rounded-xl overflow-hidden">
+        <div className="bg-card border app-border rounded-xl overflow-hidden">
           {habits.length === 0 ? (
             <p className="text-xs text-gray-400 dark:text-white/30 px-4 py-3 text-center">Noch keine Gewohnheiten angelegt</p>
           ) : (
@@ -381,8 +381,8 @@ export default function Dashboard() {
                 <button
                   key={habit.id}
                   onClick={() => checkInHabit(habit.id, today)}
-                  className={`w-full flex items-center gap-3 px-4 py-2.5 text-left hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer ${
-                    i < habits.length - 1 ? 'border-b border-gray-100 dark:border-white/8' : ''
+                  className={`w-full flex items-center gap-3 px-4 py-2.5 text-left app-hover transition-colors cursor-pointer ${
+                    i < habits.length - 1 ? 'border-b app-border' : ''
                   }`}
                 >
                   <div
@@ -410,7 +410,7 @@ export default function Dashboard() {
       </div>
 
       {/* Tageszitat */}
-      <div className="flex gap-3 bg-white dark:bg-[#1a1d27] border border-gray-100 dark:border-white/8 rounded-xl px-4 py-3">
+      <div className="flex gap-3 bg-card border app-border rounded-xl px-4 py-3">
         <Quote size={16} className="text-gray-300 dark:text-white/20 shrink-0 mt-0.5" />
         <p className="text-xs text-gray-400 dark:text-white/40 italic leading-relaxed">{quote}</p>
       </div>

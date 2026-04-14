@@ -27,7 +27,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-[#0f1117] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-page flex items-center justify-center p-4">
       <div className="w-full max-w-sm">
 
         {/* Logo */}
@@ -35,7 +35,7 @@ export default function LoginPage() {
           <div className="inline-flex items-center justify-center rounded-2xl mb-4 p-4" style={{ backgroundColor: '#0f1117' }}>
             <img src="/logo.svg" alt="Arete" className="h-12 w-auto" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Arete</h1>
+          <h1 className="text-2xl font-bold app-text">Arete</h1>
           <p className="text-sm text-gray-400 dark:text-white/40 mt-1">Melde dich an um weiterzulernen</p>
         </div>
 
@@ -55,7 +55,7 @@ export default function LoginPage() {
                 placeholder="name@beispiel.de"
                 required
                 autoComplete="email"
-                className="w-full pl-9 pr-4 py-2.5 border border-gray-200 dark:border-white/10 rounded-xl bg-white dark:bg-[#1a1d27] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/25 focus:outline-none focus:border-[#7F77DD] dark:focus:border-[#7F77DD] transition-colors text-sm"
+                className="w-full pl-9 pr-4 py-2.5 border app-border rounded-xl bg-card app-text placeholder-gray-400 dark:placeholder-white/25 focus:outline-none focus:border-[#7F77DD] dark:focus:border-[#7F77DD] transition-colors text-sm"
               />
             </div>
           </div>
@@ -73,7 +73,7 @@ export default function LoginPage() {
                 placeholder="Dein Passwort"
                 required
                 autoComplete="current-password"
-                className="w-full pl-9 pr-4 py-2.5 border border-gray-200 dark:border-white/10 rounded-xl bg-white dark:bg-[#1a1d27] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/25 focus:outline-none focus:border-[#7F77DD] dark:focus:border-[#7F77DD] transition-colors text-sm"
+                className="w-full pl-9 pr-4 py-2.5 border app-border rounded-xl bg-card app-text placeholder-gray-400 dark:placeholder-white/25 focus:outline-none focus:border-[#7F77DD] dark:focus:border-[#7F77DD] transition-colors text-sm"
               />
             </div>
           </div>

@@ -2,15 +2,46 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Verhindert dass der Browser-System-Darkmode mit dem App-Darkmode kollidiert */
-html {
+/* ── Theme-Tokens (gesteuert ausschliesslich durch html.dark class) ── */
+:root {
+  --bg-page:    #f5f5f0;
+  --bg-card:    #ffffff;
+  --bg-hover:   #ebebea;
+  --bg-divide:  #e8e8e6;
+  --text-1:     #1a1a1a;
+  --text-2:     #666666;
+  --border:     #e0e0e0;
   color-scheme: light;
 }
+
 html.dark {
+  --bg-page:    #0f1117;
+  --bg-card:    #1a1d27;
+  --bg-hover:   #22263a;
+  --bg-divide:  #2a2d3e;
+  --text-1:     #ffffff;
+  --text-2:     #a0a0b0;
+  --border:     rgba(255, 255, 255, 0.1);
   color-scheme: dark;
 }
 
-/* Klick-Feedback für alle interaktiven Elemente */
+/* ── Utility-Klassen ── */
+@layer utilities {
+  .bg-page    { background-color: var(--bg-page); }
+  .bg-card    { background-color: var(--bg-card); }
+  .app-text   { color: var(--text-1); }
+  .app-border { border-color: var(--border); }
+  .app-divide > * + * { border-top-color: var(--border); }
+  .app-hover:hover { background-color: var(--bg-hover); }
+}
+
+/* ── Seitenbasishintergrund ── */
+html, body, #root {
+  background-color: var(--bg-page);
+  color: var(--text-1);
+}
+
+/* ── Klick-Feedback für alle interaktiven Elemente ── */
 button,
 a,
 [role="button"] {
