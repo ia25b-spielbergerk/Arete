@@ -118,7 +118,7 @@ export async function saveSet(set: CardSet, userId: string): Promise<void> {
   });
   if (setErr) return;
 
-  const { error: delErr } = await supabase.from('cards').delete().eq('set_id', set.id);
+  const { error: delErr } = await supabase.from('cards').delete().eq('set_id', set.id).eq('user_id', userId);
   if (delErr) return;
 
   if (set.cards.length > 0) {
@@ -128,8 +128,8 @@ export async function saveSet(set: CardSet, userId: string): Promise<void> {
   }
 }
 
-export async function deleteSet(id: string): Promise<void> {
-  await supabase.from('card_sets').delete().eq('id', id);
+export async function deleteSet(id: string, userId: string): Promise<void> {
+  await supabase.from('card_sets').delete().eq('id', id).eq('user_id', userId);
 }
 
 // ── Fortschritt (Supabase → card_progress) ──────────────────────────────────
@@ -293,9 +293,8 @@ export async function saveDiaryEntry(entry: DiaryEntry, userId: string): Promise
   if (error) console.error('saveDiaryEntry:', error.message);
 }
 
-export async function deleteDiaryEntry(id: string): Promise<void> {
-  const { error } = await supabase.from('diary_entries').delete().eq('id', id);
-  if (error) console.error('deleteDiaryEntry:', error.message);
+export async function deleteDiaryEntry(id: string, userId: string): Promise<void> {
+  await supabase.from('diary_entries').delete().eq('id', id).eq('user_id', userId);
 }
 
 // ── Tasks (Supabase → tasks) ─────────────────────────────────────────────────
@@ -332,9 +331,8 @@ export async function saveTask(task: Task, userId: string): Promise<void> {
   });
 }
 
-export async function deleteTask(id: string): Promise<void> {
-  const { error } = await supabase.from('tasks').delete().eq('id', id);
-  if (error) console.error('deleteTask:', error.message);
+export async function deleteTask(id: string, userId: string): Promise<void> {
+  await supabase.from('tasks').delete().eq('id', id).eq('user_id', userId);
 }
 
 // ── Gewohnheiten (Supabase → habits + habit_checkins) ────────────────────────
@@ -379,18 +377,17 @@ export async function addHabitCheckin(habitId: string, date: string, userId: str
   if (error) console.error('addHabitCheckin:', error.message);
 }
 
-export async function removeHabitCheckin(habitId: string, date: string): Promise<void> {
-  const { error } = await supabase
+export async function removeHabitCheckin(habitId: string, date: string, userId: string): Promise<void> {
+  await supabase
     .from('habit_checkins')
     .delete()
     .eq('habit_id', habitId)
-    .eq('date', date);
-  if (error) console.error('removeHabitCheckin:', error.message);
+    .eq('date', date)
+    .eq('user_id', userId);
 }
 
-export async function deleteHabit(id: string): Promise<void> {
-  const { error } = await supabase.from('habits').delete().eq('id', id);
-  if (error) console.error('deleteHabit:', error.message);
+export async function deleteHabit(id: string, userId: string): Promise<void> {
+  await supabase.from('habits').delete().eq('id', id).eq('user_id', userId);
 }
 
 // ── Notizen (Supabase → notes) ───────────────────────────────────────────────
@@ -428,9 +425,8 @@ export async function saveNote(note: Note, userId: string): Promise<void> {
   if (error) console.error('saveNote:', error.message);
 }
 
-export async function deleteNote(id: string): Promise<void> {
-  const { error } = await supabase.from('notes').delete().eq('id', id);
-  if (error) console.error('deleteNote:', error.message);
+export async function deleteNote(id: string, userId: string): Promise<void> {
+  await supabase.from('notes').delete().eq('id', id).eq('user_id', userId);
 }
 
 // ── Täglicher Kristall-Tracker (Supabase → daily_crystal_tracker) ────────────
@@ -444,6 +440,7 @@ export const EMPTY_TRACKER = (date: string): DailyCrystalTracker => ({
   sessionCrystals: 0,
   dailyChallengeGranted: false,
   allDoneBonusGranted: false,
+  notesCrystals: 0,
   totalCapped: 0,
 });
 
@@ -469,6 +466,7 @@ export async function getDailyCrystalTracker(userId: string): Promise<DailyCryst
     sessionCrystals: (data.session_crystals as number) ?? 0,
     dailyChallengeGranted: data.daily_challenge_granted as boolean,
     allDoneBonusGranted: data.all_done_bonus_granted as boolean,
+    notesCrystals: (data.notes_crystals as number) ?? 0,
     totalCapped: (data.total_capped as number) ?? 0,
   };
 }
@@ -485,6 +483,7 @@ export async function saveDailyCrystalTracker(tracker: DailyCrystalTracker, user
       session_crystals: tracker.sessionCrystals,
       daily_challenge_granted: tracker.dailyChallengeGranted,
       all_done_bonus_granted: tracker.allDoneBonusGranted,
+      notes_crystals: tracker.notesCrystals,
       total_capped: tracker.totalCapped,
     },
     { onConflict: 'user_id,date' }

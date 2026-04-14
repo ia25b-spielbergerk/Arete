@@ -134,6 +134,7 @@ export interface DailyCrystalTracker {
   sessionCrystals: number;       // Kristalle aus Lerneinheiten heute (cap: 100)
   dailyChallengeGranted: boolean; // Daily-Challenge-Kristalle heute vergeben
   allDoneBonusGranted: boolean;  // "Alle Tasks erledigt"-Bonus heute vergeben
+  notesCrystals: number;         // Kristalle aus Notizen heute (cap: 25)
   totalCapped: number;           // Summe aller gecappten Kristalle heute (cap: 300)
 }
 

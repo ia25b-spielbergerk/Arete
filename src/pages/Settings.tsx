@@ -41,7 +41,7 @@ export default function SettingsPage() {
   };
 
   const handleResetOnboarding = () => {
-    localStorage.removeItem('lernapp_onboarded');
+    if (user?.id) localStorage.removeItem(`lernapp_onboarded_${user.id}`);
     window.location.href = '/';
   };
 

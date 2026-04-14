@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useStore } from './store';
-import { AuthProvider } from './lib/AuthContext';
+import { AuthProvider, useAuth } from './lib/AuthContext';
 import ErrorBoundary from './components/ErrorBoundary';
 import Onboarding from './components/Onboarding';
 import AuthGuard from './components/AuthGuard';
@@ -31,12 +31,17 @@ import ProfilPage from './pages/ProfilPage';
 
 function AppRoutes() {
   const darkMode = useStore((s) => s.darkMode);
-  const [showOnboarding, setShowOnboarding] = useState(
-    () => localStorage.getItem('lernapp_onboarded') === null
-  );
+  const { user } = useAuth();
+  const [showOnboarding, setShowOnboarding] = useState(false);
+
+  useEffect(() => {
+    if (!user) return;
+    const key = `lernapp_onboarded_${user.id}`;
+    setShowOnboarding(localStorage.getItem(key) === null);
+  }, [user?.id]);
 
   const handleOnboardingComplete = () => {
-    localStorage.setItem('lernapp_onboarded', 'true');
+    if (user) localStorage.setItem(`lernapp_onboarded_${user.id}`, 'true');
     setShowOnboarding(false);
   };
 

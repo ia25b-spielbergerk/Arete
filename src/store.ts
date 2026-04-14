@@ -241,7 +241,7 @@ export const useStore = create<AppState>((set, get) => ({
       const { [id]: _, ...rest } = state.progress;
       return { sets: state.sets.filter((s) => s.id !== id), progress: rest };
     });
-    deleteSet(id).catch(console.error);
+    deleteSet(id, userId).catch(console.error);
   },
 
   // ── User ────────────────────────────────────────────────────────────────
@@ -577,7 +577,7 @@ export const useStore = create<AppState>((set, get) => ({
     const userId = get().currentUserId;
     if (!userId) return;
     set((state) => ({ diaryEntries: state.diaryEntries.filter((e) => e.id !== id) }));
-    deleteDiaryEntry(id).catch(console.error);
+    deleteDiaryEntry(id, userId).catch(console.error);
   },
 
   // ── Tasks ─────────────────────────────────────────────────────────────────
@@ -600,7 +600,7 @@ export const useStore = create<AppState>((set, get) => ({
     const userId = get().currentUserId;
     if (!userId) return;
     set((state) => ({ tasks: state.tasks.filter((t) => t.id !== id) }));
-    deleteTask(id).catch(console.error);
+    deleteTask(id, userId).catch(console.error);
   },
 
   completeTask: (taskId, date) => {
@@ -711,7 +711,7 @@ export const useStore = create<AppState>((set, get) => ({
     const userId = get().currentUserId;
     if (!userId) return;
     set((state) => ({ habits: state.habits.filter((h) => h.id !== id) }));
-    deleteHabit(id).catch(console.error);
+    deleteHabit(id, userId).catch(console.error);
   },
 
   checkInHabit: (habitId, date) => {
@@ -752,7 +752,7 @@ export const useStore = create<AppState>((set, get) => ({
     saveHabit(updated, userId).catch(console.error);
 
     if (alreadyChecked) {
-      removeHabitCheckin(habitId, date).catch(console.error);
+      removeHabitCheckin(habitId, date, userId).catch(console.error);
     } else {
       addHabitCheckin(habitId, date, userId).catch(console.error);
 
@@ -809,7 +809,14 @@ export const useStore = create<AppState>((set, get) => ({
     if (!userId) return;
     set((state) => ({ notes: [note, ...state.notes] }));
     saveNote(note, userId).catch(console.error);
-    get().addCrystals(5);
+    const t = get().dailyCrystals;
+    if (t.notesCrystals < 25 && t.totalCapped < 300) {
+      const grant = Math.min(5, 25 - t.notesCrystals, 300 - t.totalCapped);
+      const nt = { ...t, notesCrystals: t.notesCrystals + grant, totalCapped: t.totalCapped + grant };
+      set({ dailyCrystals: nt });
+      saveDailyCrystalTracker(nt, userId).catch(console.error);
+      get().addCrystals(grant);
+    }
     get().checkAndAwardBadges();
   },
 
@@ -825,7 +832,7 @@ export const useStore = create<AppState>((set, get) => ({
     const userId = get().currentUserId;
     if (!userId) return;
     set((state) => ({ notes: state.notes.filter((n) => n.id !== id) }));
-    deleteNote(id).catch(console.error);
+    deleteNote(id, userId).catch(console.error);
   },
 }));
 
