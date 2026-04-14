@@ -97,20 +97,17 @@ function mapSet(row: Record<string, unknown>): CardSet {
 }
 
 export async function getSets(userId: string): Promise<CardSet[]> {
-  console.log('[getSets] userId:', userId);
   const { data, error } = await supabase
     .from('card_sets')
     .select('*, cards(*)')
     .eq('user_id', userId)
     .order('created_at', { ascending: false });
 
-  if (error) { console.error('[getSets] ERROR:', error.code, error.message, error.details); return []; }
-  console.log('[getSets] rows returned:', data?.length ?? 0);
+  if (error) { return []; }
   return (data ?? []).map(mapSet);
 }
 
 export async function saveSet(set: CardSet, userId: string): Promise<void> {
-  console.log('[saveSet] userId:', userId, '| set:', set.id, set.name, '| cards:', set.cards.length);
   const { error: setErr } = await supabase.from('card_sets').upsert({
     id: set.id,
     user_id: userId,
@@ -119,25 +116,20 @@ export async function saveSet(set: CardSet, userId: string): Promise<void> {
     language2: set.language2,
     created_at: set.createdAt,
   });
-  if (setErr) { console.error('[saveSet] ERROR (card_sets):', setErr.code, setErr.message, setErr.details); return; }
-  console.log('[saveSet] card_sets upsert OK');
+  if (setErr) return;
 
   const { error: delErr } = await supabase.from('cards').delete().eq('set_id', set.id);
-  if (delErr) console.error('[saveSet] ERROR (delete cards):', delErr.code, delErr.message);
+  if (delErr) return;
 
   if (set.cards.length > 0) {
-    const { error: cardsErr } = await supabase.from('cards').insert(
+    await supabase.from('cards').insert(
       set.cards.map((c) => ({ id: c.id, set_id: set.id, user_id: userId, front: c.front, back: c.back }))
     );
-    if (cardsErr) console.error('[saveSet] ERROR (insert cards):', cardsErr.code, cardsErr.message, cardsErr.details);
-    else console.log('[saveSet] cards insert OK');
   }
 }
 
 export async function deleteSet(id: string): Promise<void> {
-  console.log('[deleteSet] id:', id);
-  const { error } = await supabase.from('card_sets').delete().eq('id', id);
-  if (error) console.error('[deleteSet] ERROR:', error.code, error.message);
+  await supabase.from('card_sets').delete().eq('id', id);
 }
 
 // ── Fortschritt (Supabase → card_progress) ──────────────────────────────────
@@ -328,8 +320,7 @@ export async function getTasks(userId: string): Promise<Task[]> {
 }
 
 export async function saveTask(task: Task, userId: string): Promise<void> {
-  console.log('[saveTask] userId:', userId, '| task:', task.id, task.title);
-  const { error } = await supabase.from('tasks').upsert({
+  await supabase.from('tasks').upsert({
     id: task.id,
     user_id: userId,
     title: task.title,
@@ -339,8 +330,6 @@ export async function saveTask(task: Task, userId: string): Promise<void> {
     recurring: task.recurring,
     completed_dates: task.completedDates,
   });
-  if (error) console.error('[saveTask] ERROR:', error.code, error.message, error.details);
-  else console.log('[saveTask] OK');
 }
 
 export async function deleteTask(id: string): Promise<void> {
@@ -373,8 +362,7 @@ export async function getHabits(userId: string): Promise<Habit[]> {
 
 // Nur Habit-Metadaten speichern (Check-ins separat via addHabitCheckin/removeHabitCheckin)
 export async function saveHabit(habit: Habit, userId: string): Promise<void> {
-  console.log('[saveHabit] userId:', userId, '| habit:', habit.id, habit.name);
-  const { error } = await supabase.from('habits').upsert({
+  await supabase.from('habits').upsert({
     id: habit.id,
     user_id: userId,
     name: habit.name,
@@ -382,8 +370,6 @@ export async function saveHabit(habit: Habit, userId: string): Promise<void> {
     streak: habit.streak,
     last_checked_date: habit.lastCheckedDate,
   });
-  if (error) console.error('[saveHabit] ERROR:', error.code, error.message, error.details);
-  else console.log('[saveHabit] OK');
 }
 
 export async function addHabitCheckin(habitId: string, date: string, userId: string): Promise<void> {
