@@ -75,7 +75,7 @@ export default function BadgesPage() {
                 return (
                   <div
                     key={badge.id}
-                    className="flex flex-col items-center text-center bg-white dark:bg-white/5 border border-gray-100 dark:border-white/8 rounded-xl p-4"
+                    className="flex flex-col items-center text-center bg-white dark:bg-[#1a1d27] border border-gray-100 dark:border-white/8 rounded-xl p-4"
                   >
                     <Icon size={36} className="mb-2 text-gray-300 dark:text-white/20" />
                     <p className="text-sm font-semibold text-gray-500 dark:text-white/40">{badge.name}</p>

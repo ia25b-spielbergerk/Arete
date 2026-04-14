@@ -170,7 +170,7 @@ export default function DailyChallenge() {
         </div>
 
         {/* Karte */}
-        <div className="rounded-2xl p-6 mb-6 text-center border border-gray-100 dark:border-white/10 bg-white dark:bg-white/5">
+        <div className="rounded-2xl p-6 mb-6 text-center border border-gray-100 dark:border-white/10 bg-white dark:bg-[#1a1d27]">
           <p className="text-xs text-gray-400 mb-1 uppercase tracking-wide">{card.setName}</p>
           <p className="text-2xl font-semibold text-gray-900 dark:text-gray-100">{card.front}</p>
         </div>

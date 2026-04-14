@@ -118,7 +118,7 @@ export default function SettingsPage() {
           <h2 className="text-xs font-semibold text-gray-400 dark:text-white/30 uppercase tracking-wider mb-3">
             Darstellung
           </h2>
-          <div className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl overflow-hidden">
+          <div className="bg-white dark:bg-[#1a1d27] border border-gray-200 dark:border-white/10 rounded-xl overflow-hidden">
             <button
               onClick={toggleDarkMode}
               className="w-full flex items-center justify-between px-4 py-3.5 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer"
@@ -157,7 +157,7 @@ export default function SettingsPage() {
           <h2 className="text-xs font-semibold text-gray-400 dark:text-white/30 uppercase tracking-wider mb-3">
             Lernen
           </h2>
-          <div className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl overflow-hidden">
+          <div className="bg-white dark:bg-[#1a1d27] border border-gray-200 dark:border-white/10 rounded-xl overflow-hidden">
             <button
               onClick={toggleMixed}
               className="w-full flex items-center justify-between px-4 py-3.5 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer"
@@ -197,7 +197,7 @@ export default function SettingsPage() {
           <h2 className="text-xs font-semibold text-gray-400 dark:text-white/30 uppercase tracking-wider mb-3">
             Fortschritt
           </h2>
-          <div className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl overflow-hidden">
+          <div className="bg-white dark:bg-[#1a1d27] border border-gray-200 dark:border-white/10 rounded-xl overflow-hidden">
             <button
               onClick={() => navigate('/badges')}
               className="w-full flex items-center justify-between px-4 py-3.5 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer"
@@ -221,7 +221,7 @@ export default function SettingsPage() {
           <h2 className="text-xs font-semibold text-gray-400 dark:text-white/30 uppercase tracking-wider mb-3">
             App
           </h2>
-          <div className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl overflow-hidden divide-y divide-gray-100 dark:divide-white/8">
+          <div className="bg-white dark:bg-[#1a1d27] border border-gray-200 dark:border-white/10 rounded-xl overflow-hidden divide-y divide-gray-100 dark:divide-white/8">
 
             {/* Onboarding erneut */}
             <button
@@ -307,7 +307,7 @@ export default function SettingsPage() {
           <h2 className="text-xs font-semibold text-gray-400 dark:text-white/30 uppercase tracking-wider mb-3">
             Daten
           </h2>
-          <div className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl overflow-hidden divide-y divide-gray-100 dark:divide-white/8">
+          <div className="bg-white dark:bg-[#1a1d27] border border-gray-200 dark:border-white/10 rounded-xl overflow-hidden divide-y divide-gray-100 dark:divide-white/8">
 
             {/* Export */}
             <button
@@ -379,7 +379,7 @@ export default function SettingsPage() {
           <h2 className="text-xs font-semibold text-gray-400 dark:text-white/30 uppercase tracking-wider mb-3">
             Konto
           </h2>
-          <div className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl overflow-hidden divide-y divide-gray-100 dark:divide-white/8">
+          <div className="bg-white dark:bg-[#1a1d27] border border-gray-200 dark:border-white/10 rounded-xl overflow-hidden divide-y divide-gray-100 dark:divide-white/8">
 
             {/* Profil-Link */}
             <button

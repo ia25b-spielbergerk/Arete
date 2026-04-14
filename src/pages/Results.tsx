@@ -64,7 +64,7 @@ export default function Results() {
 
         {/* Statistik */}
         <div className="grid grid-cols-3 gap-4 mb-8">
-          <div className="text-center bg-white dark:bg-white/5 border border-gray-100 dark:border-white/8 rounded-xl p-4">
+          <div className="text-center bg-white dark:bg-[#1a1d27] border border-gray-100 dark:border-white/8 rounded-xl p-4">
             <p className="text-2xl font-bold text-gray-900 dark:text-white">{state.answers.length}</p>
             <p className="text-xs text-gray-400 dark:text-white/40 mt-1">Fragen</p>
           </div>

@@ -45,7 +45,7 @@ function AppRoutes() {
   }, [darkMode]);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#0f1117] text-gray-800 dark:text-gray-100 font-sans">
+    <div className="min-h-screen bg-white dark:bg-[#0f1117] text-gray-800 dark:text-gray-100 font-sans">
       {showOnboarding && <Onboarding onComplete={handleOnboardingComplete} />}
       <Routes>
         {/* Öffentliche Routen */}

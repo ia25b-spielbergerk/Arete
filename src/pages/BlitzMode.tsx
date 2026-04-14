@@ -155,7 +155,7 @@ export default function BlitzMode() {
           </div>
 
           <div className="grid grid-cols-3 gap-4 mb-8">
-            <div className="text-center bg-white dark:bg-white/5 border border-gray-100 dark:border-white/8 rounded-xl p-4">
+            <div className="text-center bg-white dark:bg-[#1a1d27] border border-gray-100 dark:border-white/8 rounded-xl p-4">
               <p className="text-2xl font-bold text-gray-900 dark:text-white">{cards.length}</p>
               <p className="text-xs text-gray-400 mt-1">Karten</p>
             </div>
@@ -249,7 +249,7 @@ export default function BlitzMode() {
               />
             </div>
 
-            <div className="rounded-2xl p-10 text-center shadow-sm border-2 border-gray-100 dark:border-white/10 bg-white dark:bg-white/5">
+            <div className="rounded-2xl p-10 text-center shadow-sm border-2 border-gray-100 dark:border-white/10 bg-white dark:bg-[#1a1d27]">
               <p className="text-xs text-gray-400 mb-4 uppercase tracking-wide">{card.reversed ? set.language2 : set.language1}</p>
               <p className="text-3xl font-bold text-gray-900 dark:text-gray-100">{card.front}</p>
               <p className="text-xs mt-8" style={{ color: '#7F77DD' }}>Präge es dir ein!</p>

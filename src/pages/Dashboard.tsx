@@ -338,7 +338,7 @@ export default function Dashboard() {
             Alle <ChevronRight size={13} />
           </Link>
         </div>
-        <div className="bg-white dark:bg-white/5 border border-gray-100 dark:border-white/8 rounded-xl overflow-hidden">
+        <div className="bg-white dark:bg-[#1a1d27] border border-gray-100 dark:border-white/8 rounded-xl overflow-hidden">
           {previewTasks.length === 0 ? (
             <p className="text-xs text-gray-400 dark:text-white/30 px-4 py-3 text-center">
               {todayTasks.filter(isTaskDone).length === todayTasks.length && todayTasks.length > 0
@@ -371,7 +371,7 @@ export default function Dashboard() {
             Alle <ChevronRight size={13} />
           </Link>
         </div>
-        <div className="bg-white dark:bg-white/5 border border-gray-100 dark:border-white/8 rounded-xl overflow-hidden">
+        <div className="bg-white dark:bg-[#1a1d27] border border-gray-100 dark:border-white/8 rounded-xl overflow-hidden">
           {habits.length === 0 ? (
             <p className="text-xs text-gray-400 dark:text-white/30 px-4 py-3 text-center">Noch keine Gewohnheiten angelegt</p>
           ) : (
@@ -410,7 +410,7 @@ export default function Dashboard() {
       </div>
 
       {/* Tageszitat */}
-      <div className="flex gap-3 bg-white dark:bg-white/5 border border-gray-100 dark:border-white/8 rounded-xl px-4 py-3">
+      <div className="flex gap-3 bg-white dark:bg-[#1a1d27] border border-gray-100 dark:border-white/8 rounded-xl px-4 py-3">
         <Quote size={16} className="text-gray-300 dark:text-white/20 shrink-0 mt-0.5" />
         <p className="text-xs text-gray-400 dark:text-white/40 italic leading-relaxed">{quote}</p>
       </div>

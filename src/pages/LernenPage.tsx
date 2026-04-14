@@ -93,7 +93,7 @@ export default function LernenPage() {
   return (
     <Layout>
       {/* Kompakte Stats-Leiste */}
-      <div className={`flex items-center bg-white dark:bg-white/5 border border-gray-100 dark:border-white/8 rounded-xl px-4 py-2.5 gap-0 ${daily?.completed ? 'mb-2' : 'mb-4'}`}>
+      <div className={`flex items-center bg-white dark:bg-[#1a1d27] border border-gray-100 dark:border-white/8 rounded-xl px-4 py-2.5 gap-0 ${daily?.completed ? 'mb-2' : 'mb-4'}`}>
         {/* Streak — Orange */}
         <div className="flex items-center gap-1.5 pr-4 border-r border-gray-200 dark:border-white/10">
           <Flame size={15} style={{ color: activeToday ? '#EF9F27' : undefined }} className={!activeToday ? 'text-gray-300 dark:text-white/20' : ''} />

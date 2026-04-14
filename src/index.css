@@ -2,6 +2,14 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Verhindert dass der Browser-System-Darkmode mit dem App-Darkmode kollidiert */
+html {
+  color-scheme: light;
+}
+html.dark {
+  color-scheme: dark;
+}
+
 /* Klick-Feedback für alle interaktiven Elemente */
 button,
 a,

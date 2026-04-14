@@ -44,7 +44,7 @@ function SectionCard({ children, title, icon: Icon, color }: {
   color: string;
 }) {
   return (
-    <div className="bg-white dark:bg-white/5 border border-gray-100 dark:border-white/8 rounded-2xl p-5 mb-4">
+    <div className="bg-white dark:bg-[#1a1d27] border border-gray-100 dark:border-white/8 rounded-2xl p-5 mb-4">
       <div className="flex items-center gap-2 mb-4">
         <Icon size={15} style={{ color }} />
         <h2 className="text-xs font-semibold text-gray-500 dark:text-white/40 uppercase tracking-wider">{title}</h2>
@@ -208,7 +208,7 @@ export default function StatsContent() {
           {overviewStats.map(({ label, value, color, icon: Icon }) => (
             <div
               key={label}
-              className="bg-white dark:bg-white/5 border border-gray-100 dark:border-white/8 rounded-2xl p-4"
+              className="bg-white dark:bg-[#1a1d27] border border-gray-100 dark:border-white/8 rounded-2xl p-4"
             >
               <div className="flex items-center gap-1.5 mb-2">
                 <Icon size={13} style={{ color }} />

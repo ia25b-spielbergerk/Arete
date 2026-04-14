@@ -53,7 +53,7 @@ export default function SetCard({ set }: Props) {
   const bestScore = Math.max(progress?.bestQuizScore ?? 0, progress?.bestTestScore ?? 0);
 
   return (
-    <div className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl p-5 hover:border-[#7F77DD]/50 hover:shadow-md transition-all">
+    <div className="bg-white dark:bg-[#1a1d27] border border-gray-200 dark:border-white/10 rounded-xl p-5 hover:border-[#7F77DD]/50 hover:shadow-md transition-all">
       <div className="flex items-start justify-between gap-2 mb-3">
         <div className="min-w-0">
           <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-base truncate">{set.name}</h3>

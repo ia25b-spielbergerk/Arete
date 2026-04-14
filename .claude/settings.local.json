@@ -31,7 +31,10 @@
       "Bash(cmd.exe /c \"cd C:\\\\\\\\Users\\\\\\\\keanu\\\\\\\\C\\\\\\\\Users\\\\\\\\keanu\\\\\\\\lernapp && npx tsc --noEmit 2>&1\")",
       "Bash(npm install:*)",
       "mcp__claude_ai_Supabase__list_projects",
-      "mcp__claude_ai_Supabase__execute_sql"
+      "mcp__claude_ai_Supabase__execute_sql",
+      "Bash(echo \"EXIT:$?\")",
+      "Bash(npm uninstall:*)",
+      "Bash(powershell:*)"
     ]
   }
 }

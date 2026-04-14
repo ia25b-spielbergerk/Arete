@@ -152,7 +152,7 @@ export default function Quiz() {
           />
         </div>
 
-        <div className="rounded-2xl p-6 mb-6 text-center border border-gray-100 dark:border-white/10 bg-white dark:bg-white/5">
+        <div className="rounded-2xl p-6 mb-6 text-center border border-gray-100 dark:border-white/10 bg-white dark:bg-[#1a1d27]">
           <p className="text-xs text-gray-400 mb-3 uppercase tracking-wide">{q.card.reversed ? set.language2 : set.language1}</p>
           <p className="text-2xl font-semibold text-gray-900 dark:text-gray-100">{q.card.front}</p>
           <p className="text-xs text-gray-300 dark:text-gray-600 mt-2">Wähle die richtige Übersetzung</p>
