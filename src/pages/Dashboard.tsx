@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Flame, Gem, Sun, Cloud, CloudRain, CloudSnow, CloudLightning, CloudDrizzle,
-  CircleCheck, CalendarDays, ChevronRight, Quote, Check,
+  CircleCheck, ChevronRight, Quote, Check,
   BookOpen, Plus, Repeat2, ArrowRight, Settings, Zap,
 } from 'lucide-react';
 import Layout from '../components/Layout';
@@ -159,44 +159,61 @@ export default function Dashboard() {
 
   return (
     <Layout>
-      {/* Datum + Wetter + Einstellungen */}
-      <div className="flex items-start justify-between mb-5">
-        <div>
-          <p className="text-2xl font-bold app-text">
-            {WEEKDAYS[now.getDay()]}, {now.getDate()}. {MONTHS[now.getMonth()]}
-          </p>
-          <p className="text-sm mt-0.5" style={{ color: '#888888' }}>
-            {getGreeting(now.getHours())}{profile?.username ? `, ${profile.username}` : ''}!
-          </p>
+      {/* Gradient Header */}
+      <div className="dashboard-header -mx-4 -mt-6 px-4 pt-6 pb-5 mb-5">
+        <div className="flex items-start justify-between mb-5">
+          <div>
+            <p className="text-[13px] font-medium mb-1" style={{ color: 'var(--text-2)' }}>
+              {WEEKDAYS[now.getDay()]}, {now.getDate()}. {MONTHS[now.getMonth()]}
+            </p>
+            <p className="text-[22px] font-bold leading-tight app-text" style={{ letterSpacing: '-0.4px' }}>
+              {getGreeting(now.getHours())},
+              {profile?.username ? <><br />{profile.username}</> : ''}
+            </p>
+          </div>
+          <div className="flex items-center gap-2.5 mt-1">
+            <WeatherWidget />
+            <Link to="/settings" style={{ color: 'var(--text-2)' }} aria-label="Einstellungen">
+              <Settings size={18} />
+            </Link>
+            <Link to="/profil" aria-label="Mein Profil">
+              <div
+                className="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-bold hover:opacity-80 transition-opacity shrink-0"
+                style={{ backgroundColor: profile?.avatar_color ?? 'var(--accent)' }}
+              >
+                {profile?.username ? getInitials(profile.username) || '?' : '?'}
+              </div>
+            </Link>
+          </div>
         </div>
-        <div className="flex items-center gap-3 mt-1">
-          <WeatherWidget />
-          <Link
-            to="/settings"
-            className="transition-colors"
-            style={{ color: '#888888' }}
-            aria-label="Einstellungen"
-          >
-            <Settings size={18} />
-          </Link>
-          <Link
-            to="/profil"
-            aria-label="Mein Profil"
-          >
-            <div
-              className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold hover:opacity-80 transition-opacity"
-              style={{ backgroundColor: profile?.avatar_color ?? '#7F77DD' }}
-            >
-              {profile?.username ? getInitials(profile.username) || '?' : '?'}
+
+        {/* Streak + Kristalle im Header */}
+        <div className="grid grid-cols-2 gap-3">
+          <div className="flex items-center gap-2.5 rounded-xl px-4 py-3 border bg-card app-border">
+            <Flame size={18} style={{ color: activeToday ? '#EF9F27' : 'var(--text-2)' }} />
+            <div>
+              <p className="text-xl font-bold leading-none" style={{ color: activeToday ? '#EF9F27' : 'var(--text-1)' }}>
+                {user.streak}
+              </p>
+              <p className="text-[11px] mt-0.5" style={{ color: 'var(--text-2)' }}>Tage Streak</p>
             </div>
-          </Link>
+          </div>
+          <div className="flex items-center gap-2.5 rounded-xl px-4 py-3 border bg-card app-border">
+            <Gem size={18} style={{ color: 'var(--accent)' }} />
+            <div>
+              <p className="text-xl font-bold leading-none" style={{ color: 'var(--accent)' }}>
+                {user.crystals ?? 0}
+              </p>
+              <p className="text-[11px] mt-0.5" style={{ color: 'var(--text-2)' }}>Kristalle</p>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Getting-Started — nur für neue Nutzer */}
       {isNewUser && (
-        <div className="mb-5 rounded-2xl border p-5" style={{ background: 'rgba(127,119,221,0.06)', borderColor: 'rgba(127,119,221,0.2)' }}>
-          <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: '#7F77DD' }}>
+        <div className="mb-5 rounded-2xl border p-5 bg-card app-border">
+          <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: 'var(--accent)' }}>
             Erste Schritte
           </p>
           <h2 className="text-lg font-bold app-text mb-1">
@@ -214,15 +231,15 @@ export default function Dashboard() {
           <div className="flex gap-2">
             <Link
               to="/planer"
-              className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-medium border transition-colors"
-              style={{ color: '#1D9E75', borderColor: 'rgba(29,158,117,0.3)', background: 'rgba(29,158,117,0.07)' }}
+              className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-medium border app-border app-hover transition-colors"
+              style={{ color: '#1D9E75' }}
             >
               <Plus size={13} /> Aufgabe
             </Link>
             <Link
               to="/gewohnheiten"
-              className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-medium border transition-colors"
-              style={{ color: '#EF9F27', borderColor: 'rgba(239,159,39,0.3)', background: 'rgba(239,159,39,0.07)' }}
+              className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-medium border app-border app-hover transition-colors"
+              style={{ color: '#EF9F27' }}
             >
               <Repeat2 size={13} /> Gewohnheit
             </Link>
@@ -230,96 +247,53 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Streak + Kristalle */}
-      <div className="flex gap-3 mb-5">
-        {/* Streak — Orange */}
+      {/* Daily Challenge — mint gradient banner */}
+      {daily && daily.cards.length > 0 && !daily.completed && (
         <div
-          className="flex-1 flex items-center gap-2.5 rounded-xl px-4 py-3 border"
-          style={{ background: 'rgba(239,159,39,0.09)', borderColor: 'rgba(239,159,39,0.22)' }}
+          className="flex items-center gap-4 rounded-xl px-4 py-4 mb-4"
+          style={{ background: 'linear-gradient(135deg, oklch(0.62 0.18 160) 0%, oklch(0.52 0.18 180) 100%)' }}
         >
-          <Flame size={20} style={{ color: activeToday ? '#EF9F27' : 'rgba(239,159,39,0.3)' }} />
-          <div>
-            <p className="text-xl font-bold leading-none" style={{ color: activeToday ? '#EF9F27' : 'rgba(239,159,39,0.4)' }}>
-              {user.streak}
+          <div className="flex-1">
+            <p className="text-[10px] font-bold uppercase tracking-wider mb-1" style={{ color: 'rgba(0,0,0,0.45)' }}>
+              Tägliche Challenge
             </p>
-            <p className="text-xs mt-0.5" style={{ color: '#888888' }}>Tage Streak</p>
-          </div>
-        </div>
-        {/* Kristalle — Blau */}
-        <div
-          className="flex-1 flex items-center gap-2.5 rounded-xl px-4 py-3 border"
-          style={{ background: 'rgba(55,138,221,0.09)', borderColor: 'rgba(55,138,221,0.22)' }}
-        >
-          <Gem size={20} style={{ color: '#378ADD' }} />
-          <div>
-            <p className="text-xl font-bold leading-none" style={{ color: '#378ADD' }}>
-              {user.crystals ?? 0}
+            <p className="text-base font-bold" style={{ color: '#0a0f0a' }}>
+              {daily.cards.length} Karten warten
             </p>
-            <p className="text-xs mt-0.5" style={{ color: '#888888' }}>Kristalle</p>
           </div>
+          <button
+            onClick={() => navigate('/daily')}
+            className="shrink-0 text-sm font-bold px-4 py-2 rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+            style={{ background: 'rgba(0,0,0,0.18)', color: '#fff' }}
+          >
+            Starten →
+          </button>
         </div>
-      </div>
-
-      {/* Daily Challenge — Grün */}
-      {daily && daily.cards.length > 0 && (
-        <div
-          className="flex items-center justify-between rounded-xl px-4 py-3 mb-4 border"
-          style={
-            daily.completed
-              ? { background: 'rgba(29,158,117,0.09)', borderColor: 'rgba(29,158,117,0.22)' }
-              : { background: 'rgba(29,158,117,0.09)', borderColor: 'rgba(29,158,117,0.22)' }
-          }
-        >
-          <div className="flex items-center gap-2.5">
-            {daily.completed
-              ? <CircleCheck size={18} style={{ color: '#1D9E75' }} className="shrink-0" />
-              : <CalendarDays size={18} style={{ color: '#1D9E75' }} className="shrink-0" />
-            }
-            <div>
-              <p className="text-sm font-medium" style={{ color: '#1D9E75' }}>Tägliche Challenge</p>
-              <p className="text-xs" style={{ color: '#888888' }}>
-                {daily.completed ? `Erledigt · ${daily.score}%` : `${daily.cards.length} Karten warten`}
-              </p>
-            </div>
-          </div>
-          {!daily.completed && (
-            <button
-              onClick={() => navigate('/daily')}
-              className="shrink-0 text-white text-xs font-medium px-3 py-1.5 rounded-lg transition-opacity hover:opacity-80 cursor-pointer"
-              style={{ backgroundColor: '#1D9E75' }}
-            >
-              Starten
-            </button>
-          )}
+      )}
+      {daily?.completed && (
+        <div className="flex items-center gap-2.5 rounded-xl px-4 py-3 mb-4 border bg-card app-border">
+          <CircleCheck size={18} style={{ color: '#1D9E75' }} className="shrink-0" />
+          <p className="text-sm font-medium" style={{ color: '#1D9E75' }}>Challenge erledigt · {daily.score}%</p>
         </div>
       )}
 
       {/* Tagesstatistik */}
       <div className="grid grid-cols-3 gap-2 mb-4">
-        <div
-          className="rounded-xl px-3 py-2.5 border"
-          style={{ background: 'rgba(127,119,221,0.07)', borderColor: 'rgba(127,119,221,0.18)' }}
-        >
+        <div className="rounded-xl px-3 py-2.5 border bg-card app-border">
           <div className="flex items-center gap-1 mb-1">
-            <Zap size={11} style={{ color: '#7F77DD' }} />
+            <Zap size={11} style={{ color: 'var(--accent)' }} />
             <p className="text-[10px]" style={{ color: '#888888' }}>XP heute</p>
           </div>
-          <p className="text-lg font-bold leading-none" style={{ color: '#7F77DD' }}>{xpToday}</p>
+          <p className="text-lg font-bold leading-none" style={{ color: 'var(--accent)' }}>{xpToday}</p>
         </div>
-        <div
-          className="rounded-xl px-3 py-2.5 border"
-          style={{ background: 'rgba(127,119,221,0.07)', borderColor: 'rgba(127,119,221,0.18)' }}
-        >
+        <div className="rounded-xl px-3 py-2.5 border bg-card app-border">
           <div className="flex items-center gap-1 mb-1">
-            <BookOpen size={11} style={{ color: '#7F77DD' }} />
+            <BookOpen size={11} style={{ color: 'var(--accent)' }} />
             <p className="text-[10px]" style={{ color: '#888888' }}>Sessions</p>
           </div>
-          <p className="text-lg font-bold leading-none" style={{ color: '#7F77DD' }}>{sessionsToday}</p>
+          <p className="text-lg font-bold leading-none" style={{ color: 'var(--accent)' }}>{sessionsToday}</p>
         </div>
-        <div
-          className="rounded-xl px-3 py-2.5 border"
-          style={{ background: 'rgba(239,159,39,0.07)', borderColor: 'rgba(239,159,39,0.18)' }}
-        >
+        <div className="rounded-xl px-3 py-2.5 border bg-card app-border">
           <div className="flex items-center gap-1 mb-1">
             <Repeat2 size={11} style={{ color: '#EF9F27' }} />
             <p className="text-[10px]" style={{ color: '#888888' }}>Habits</p>
@@ -389,7 +363,7 @@ export default function Dashboard() {
                     className="w-4 h-4 rounded-full border-2 shrink-0 flex items-center justify-center transition-colors"
                     style={done
                       ? { borderColor: '#1D9E75', backgroundColor: '#1D9E75' }
-                      : { borderColor: 'rgba(239,159,39,0.4)' }
+                      : { borderColor: '#d0d0d0' }
                     }
                   >
                     {done && <Check size={10} className="text-white" strokeWidth={3} />}

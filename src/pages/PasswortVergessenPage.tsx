@@ -32,7 +32,7 @@ export default function PasswortVergessenPage() {
         {/* Logo */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl mb-4 bg-[#f9f9f9] dark:bg-[#1a1a1a]">
-            <BookOpen size={28} style={{ color: '#7F77DD' }} />
+            <BookOpen size={28} style={{ color: 'var(--accent)' }} />
           </div>
           <h1 className="text-2xl font-bold app-text">Passwort zurücksetzen</h1>
           <p className="text-sm text-[#888888] dark:text-white/40 mt-1">
@@ -50,7 +50,7 @@ export default function PasswortVergessenPage() {
             </p>
             <Link
               to="/login"
-              className="flex items-center justify-center gap-2 w-full text-sm font-medium py-2.5 rounded-xl border app-border text-[#555555] dark:text-white/60 hover:border-[#7F77DD] transition-colors"
+              className="flex items-center justify-center gap-2 w-full text-sm font-medium py-2.5 rounded-xl border app-border text-[#555555] dark:text-white/60 hover:border-[var(--accent)] transition-colors"
             >
               <ArrowLeft size={15} />
               Zurück zum Login
@@ -72,7 +72,7 @@ export default function PasswortVergessenPage() {
                   required
                   autoFocus
                   autoComplete="email"
-                  className="w-full pl-9 pr-4 py-2.5 border app-border rounded-xl bg-card app-text placeholder-gray-400 dark:placeholder-white/25 focus:outline-none focus:border-[#7F77DD] dark:focus:border-[#7F77DD] transition-colors text-sm"
+                  className="w-full pl-9 pr-4 py-2.5 border app-border rounded-xl bg-card app-text placeholder-gray-400 dark:placeholder-white/25 focus:outline-none focus:border-[var(--accent)] dark:focus:border-[var(--accent)] transition-colors text-sm"
                 />
               </div>
             </div>
@@ -87,14 +87,14 @@ export default function PasswortVergessenPage() {
               type="submit"
               disabled={loading || !email.trim()}
               className="w-full flex items-center justify-center gap-2 text-white font-medium py-2.5 rounded-xl transition-opacity disabled:opacity-50 cursor-pointer hover:opacity-90"
-              style={{ backgroundColor: '#7F77DD' }}
+              style={{ backgroundColor: 'var(--accent)' }}
             >
               {loading && <span className="w-4 h-4 rounded-full border-2 border-white border-t-transparent animate-spin" />}
               {loading ? 'Wird gesendet...' : 'Reset-Link senden'}
             </button>
 
             <p className="text-center text-sm text-[#888888] dark:text-white/40">
-              <Link to="/login" className="hover:underline inline-flex items-center gap-1" style={{ color: '#7F77DD' }}>
+              <Link to="/login" className="hover:underline inline-flex items-center gap-1" style={{ color: 'var(--accent)' }}>
                 <ArrowLeft size={13} />
                 Zurück zum Login
               </Link>

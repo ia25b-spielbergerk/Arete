@@ -55,7 +55,7 @@ export default function TestMode() {
       <Layout>
         <div className="text-center py-20">
           <p className="text-[#888888]">Set nicht gefunden.</p>
-          <Link to="/" className="text-sm mt-2 inline-block" style={{ color: '#7F77DD' }}>← Zurück</Link>
+          <Link to="/" className="text-sm mt-2 inline-block" style={{ color: 'var(--accent)' }}>← Zurück</Link>
         </div>
       </Layout>
     );
@@ -144,7 +144,7 @@ export default function TestMode() {
             aria-valuemax={100}
             aria-label="Testfortschritt"
             className="h-1.5 rounded-full transition-all duration-300"
-            style={{ width: `${progress}%`, backgroundColor: '#7F77DD' }}
+            style={{ width: `${progress}%`, backgroundColor: 'var(--accent)' }}
           />
         </div>
 
@@ -169,7 +169,7 @@ export default function TestMode() {
                 ? isCorrect
                   ? 'border-[#1D9E75] text-[#1D9E75]'
                   : 'border-[#E24B4A] text-[#E24B4A]'
-                : 'border-[#ebebeb] dark:border-[#2a2a2a] dark:text-white focus:border-[#7F77DD]'
+                : 'border-[#ebebeb] dark:border-[#2a2a2a] dark:text-white focus:border-[var(--accent)]'
             }`}
           />
 
@@ -179,7 +179,7 @@ export default function TestMode() {
                 type="submit"
                 disabled={!input.trim()}
                 className="w-full mt-3 disabled:bg-[#ebebeb] dark:disabled:bg-[#2a2a2a] disabled:text-[#888888] text-white font-medium py-3 rounded-xl transition-colors cursor-pointer"
-                style={input.trim() ? { backgroundColor: '#7F77DD' } : undefined}
+                style={input.trim() ? { backgroundColor: 'var(--accent)' } : undefined}
               >
                 Prüfen
               </button>
@@ -221,7 +221,7 @@ export default function TestMode() {
           <button
             onClick={handleNext}
             className="w-full text-white font-medium py-3 rounded-xl transition-colors cursor-pointer hover:opacity-90"
-            style={{ backgroundColor: '#7F77DD' }}
+            style={{ backgroundColor: 'var(--accent)' }}
           >
             {index + 1 >= cards.length ? 'Ergebnis ansehen' : 'Weiter →'}
           </button>

@@ -30,7 +30,7 @@ const MOODS = [
   { value: 2 as const, label: 'Okay',      Icon: Meh,      hex: '#EF9F27' },
   { value: 3 as const, label: 'Gut',       Icon: Smile,    hex: '#1D9E75' },
   { value: 4 as const, label: 'Sehr gut',  Icon: SmilePlus, hex: '#378ADD' },
-  { value: 5 as const, label: 'Perfekt',   Icon: Star,     hex: '#7F77DD' },
+  { value: 5 as const, label: 'Perfekt',   Icon: Star,     hex: 'var(--accent)' },
 ];
 
 const MOOD_CALENDAR_COLOR = ['', 'bg-red-400', 'bg-amber-400', 'bg-green-400', 'bg-blue-400', 'bg-violet-400'];
@@ -122,7 +122,7 @@ function TasksTab() {
             <button
               onClick={() => setSelectedDate(today)}
               className="text-xs flex items-center gap-0.5 mx-auto mt-0.5 cursor-pointer"
-              style={{ color: '#7F77DD' }}
+              style={{ color: 'var(--accent)' }}
             >
               <RotateCcw size={11} /> Heute
             </button>
@@ -143,7 +143,7 @@ function TasksTab() {
           <div className="w-full h-1.5 bg-[#ebebeb] dark:bg-[#2a2a2a] rounded-full overflow-hidden">
             <div
               className="h-full rounded-full transition-all"
-              style={{ width: `${totalCount > 0 ? (doneCount / totalCount) * 100 : 0}%`, backgroundColor: '#7F77DD' }}
+              style={{ width: `${totalCount > 0 ? (doneCount / totalCount) * 100 : 0}%`, backgroundColor: 'var(--accent)' }}
             />
           </div>
         </div>
@@ -239,7 +239,7 @@ function TasksTab() {
                 onClick={() => setRecurring(r)}
                 className="text-xs px-2.5 py-1 rounded-lg border transition-colors cursor-pointer"
                 style={recurring === r
-                  ? { borderColor: '#7F77DD', background: 'rgba(127,119,221,0.1)', color: '#7F77DD' }
+                  ? { borderColor: 'var(--accent)', color: 'var(--accent)' }
                   : { borderColor: '#ebebeb', color: '#888888' }
                 }
               >
@@ -270,7 +270,7 @@ function TasksTab() {
         <button
           onClick={() => setShowForm(true)}
           className="flex items-center gap-2 text-sm font-medium cursor-pointer"
-          style={{ color: '#7F77DD' }}
+          style={{ color: 'var(--accent)' }}
         >
           <Plus size={16} /> Aufgabe hinzufügen
         </button>
@@ -351,7 +351,7 @@ function DiaryTab() {
             <button
               onClick={() => setSelectedDate(today)}
               className="text-xs flex items-center gap-0.5 mx-auto mt-0.5 cursor-pointer"
-              style={{ color: '#7F77DD' }}
+              style={{ color: 'var(--accent)' }}
             >
               <RotateCcw size={11} /> Heute
             </button>

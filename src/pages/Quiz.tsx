@@ -58,7 +58,7 @@ export default function Quiz() {
       <Layout>
         <div className="text-center py-20">
           <p className="text-[#888888]">Set nicht gefunden.</p>
-          <Link to="/" className="text-sm mt-2 inline-block" style={{ color: '#7F77DD' }}>← Zurück</Link>
+          <Link to="/" className="text-sm mt-2 inline-block" style={{ color: 'var(--accent)' }}>← Zurück</Link>
         </div>
       </Layout>
     );
@@ -112,7 +112,7 @@ export default function Quiz() {
 
   const optionStyle = (option: string) => {
     if (selected === null) {
-      return { className: 'border-[#ebebeb] dark:border-[#2a2a2a] hover:border-[#7F77DD]/40 hover:bg-[#7F77DD]/10 cursor-pointer dark:text-white' };
+      return { className: 'border-[#ebebeb] dark:border-[#2a2a2a] hover:border-[var(--accent)] hover:bg-[var(--accent-bg)] cursor-pointer dark:text-white' };
     }
     if (option === q.correct) return {
       className: 'border-2',
@@ -148,7 +148,7 @@ export default function Quiz() {
             aria-valuemax={100}
             aria-label="Quizfortschritt"
             className="h-1.5 rounded-full transition-all duration-300"
-            style={{ width: `${progress}%`, backgroundColor: '#7F77DD' }}
+            style={{ width: `${progress}%`, backgroundColor: 'var(--accent)' }}
           />
         </div>
 
@@ -178,7 +178,7 @@ export default function Quiz() {
           <button
             onClick={handleNext}
             className="w-full text-white font-medium py-3 rounded-xl transition-colors cursor-pointer hover:opacity-90"
-            style={{ backgroundColor: '#7F77DD' }}
+            style={{ backgroundColor: 'var(--accent)' }}
           >
             {qIndex + 1 >= questions.length ? 'Ergebnis ansehen' : 'Weiter →'}
           </button>

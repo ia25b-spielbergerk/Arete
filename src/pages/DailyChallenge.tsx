@@ -88,7 +88,7 @@ export default function DailyChallenge() {
           <Link
             to="/sets/new"
             className="text-white font-medium px-6 py-2.5 rounded-lg transition-opacity hover:opacity-80"
-            style={{ backgroundColor: '#7F77DD' }}
+            style={{ backgroundColor: 'var(--accent)' }}
           >
             Set erstellen
           </Link>
@@ -197,7 +197,7 @@ export default function DailyChallenge() {
               type="submit"
               disabled={!input.trim()}
               className="w-full mt-3 disabled:bg-[#ebebeb] dark:disabled:bg-[#2a2a2a] disabled:text-[#888888] text-white font-medium py-3 rounded-xl transition-colors cursor-pointer"
-              style={input.trim() ? { backgroundColor: '#7F77DD' } : undefined}
+              style={input.trim() ? { backgroundColor: 'var(--accent)' } : undefined}
             >
               Prüfen
             </button>
@@ -237,7 +237,7 @@ export default function DailyChallenge() {
             <button
               onClick={handleNext}
               className="w-full text-white font-medium py-3 rounded-xl transition-colors cursor-pointer hover:opacity-90"
-              style={{ backgroundColor: '#7F77DD' }}
+              style={{ backgroundColor: 'var(--accent)' }}
             >
               {index + 1 >= studyCards.length ? 'Auswerten' : 'Weiter →'}
             </button>

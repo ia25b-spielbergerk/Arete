@@ -23,7 +23,7 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
-const DEFAULT_COLOR = '#7F77DD';
+const DEFAULT_COLOR = 'var(--accent)';
 
 async function fetchProfile(userId: string): Promise<Profile | null> {
   const { data } = await supabase

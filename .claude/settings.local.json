@@ -38,7 +38,15 @@
       "Bash(grep -o 'prefers-color-scheme.*dark' dist/assets/*.css)",
       "mcp__claude_ai_Supabase__apply_migration",
       "Bash(git add *)",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "WebFetch(domain:api.anthropic.com)",
+      "Bash(cp \"C:\\\\Users\\\\keanu\\\\.claude\\\\projects\\\\C--Users-keanu-C-Users-keanu-lernapp\\\\edcb5ad4-1e93-4353-a7b8-f8252197337b\\\\tool-results\\\\webfetch-1776754936096-cuujr8.bin\" /tmp/design.gz)",
+      "Bash(gunzip -c /tmp/design.gz)",
+      "Read(//tmp/**)",
+      "Bash(mkdir design_bundle)",
+      "Bash(tar -xf design_out.html -C design_bundle)",
+      "Bash(xargs sed *)"
     ]
   }
 }

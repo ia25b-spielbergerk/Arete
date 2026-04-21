@@ -50,17 +50,14 @@ export default function MehrPage() {
               <ShoppingBag size={20} style={{ color: '#378ADD' }} />
               <h1 className="text-2xl font-semibold app-text">Shop</h1>
             </div>
-            <div
-              className="flex items-center gap-2 rounded-xl px-4 py-2 border"
-              style={{ background: 'rgba(55,138,221,0.09)', borderColor: 'rgba(55,138,221,0.22)' }}
-            >
+            <div className="flex items-center gap-2 rounded-xl px-4 py-2 border bg-card app-border">
               <Gem size={18} style={{ color: '#378ADD' }} />
               <span className="text-lg font-bold" style={{ color: '#378ADD' }}>{crystals}</span>
             </div>
           </div>
 
           {/* Tägliches Kristall-Limit */}
-          <div className="rounded-2xl border p-5 mb-6" style={{ background: 'rgba(55,138,221,0.06)', borderColor: 'rgba(55,138,221,0.18)' }}>
+          <div className="rounded-2xl border p-5 mb-6 bg-card app-border">
             <div className="flex items-center justify-between mb-3">
               <p className="text-sm font-semibold app-text">Heute verdient</p>
               <span className="text-sm font-bold" style={{ color: '#378ADD' }}>{dc.totalCapped} / 300</span>
@@ -76,7 +73,7 @@ export default function MehrPage() {
                 { label: 'Tagebuch', Icon: NotebookPen, earned: dc.diaryGranted ? 10 : 0, cap: 10, done: dc.diaryGranted, color: '#378ADD' },
                 { label: 'Tasks', Icon: CalendarCheck2, earned: dc.taskCrystals, cap: 50, done: dc.taskCrystals >= 50, color: '#1D9E75' },
                 { label: 'Habits', Icon: Repeat2, earned: dc.rewardedHabitIds.length * 10, cap: null, done: false, color: '#EF9F27' },
-                { label: 'Lerneinheiten', Icon: BookOpen, earned: dc.sessionCrystals, cap: 100, done: dc.sessionCrystals >= 100, color: '#7F77DD' },
+                { label: 'Lerneinheiten', Icon: BookOpen, earned: dc.sessionCrystals, cap: 100, done: dc.sessionCrystals >= 100, color: 'var(--accent)' },
                 { label: 'Daily Challenge', Icon: Trophy, earned: dc.dailyChallengeGranted ? 20 : 0, cap: 20, done: dc.dailyChallengeGranted, color: '#1D9E75' },
               ].map(({ label, Icon, earned, cap, done, color }) => (
                 <div key={label} className="flex items-center justify-between text-xs">

@@ -13,7 +13,7 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
           <img src="/logo.svg" alt="Arete" className="h-14 w-auto" />
         </div>
         <p className="text-white text-xl font-bold tracking-wide">Arete</p>
-        <div className="w-7 h-7 rounded-full border-2 border-[#7F77DD] border-t-transparent animate-spin mt-1" />
+        <div className="w-7 h-7 rounded-full border-2 border-[var(--accent)] border-t-transparent animate-spin mt-1" />
       </div>
     );
   }

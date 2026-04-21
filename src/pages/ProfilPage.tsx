@@ -5,7 +5,7 @@ import Layout from '../components/Layout';
 import { useAuth, getInitials } from '../lib/AuthContext';
 
 const COLORS = [
-  { name: 'Violett', hex: '#7F77DD' },
+  { name: 'Mint',    hex: 'var(--accent)' },
   { name: 'Orange',  hex: '#EF9F27' },
   { name: 'Blau',    hex: '#378ADD' },
   { name: 'Grün',    hex: '#1D9E75' },
@@ -19,7 +19,7 @@ export default function ProfilPage() {
 
   const [username, setUsername] = useState('');
   const [bio, setBio] = useState('');
-  const [avatarColor, setAvatarColor] = useState('#7F77DD');
+  const [avatarColor, setAvatarColor] = useState('var(--accent)');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
@@ -28,7 +28,7 @@ export default function ProfilPage() {
     if (profile) {
       setUsername(profile.username ?? '');
       setBio(profile.bio ?? '');
-      setAvatarColor(profile.avatar_color ?? '#7F77DD');
+      setAvatarColor(profile.avatar_color ?? 'var(--accent)');
     }
   }, [profile]);
 
@@ -65,7 +65,7 @@ export default function ProfilPage() {
             <ChevronLeft size={22} />
           </button>
           <div className="flex items-center gap-2">
-            <User size={20} style={{ color: '#7F77DD' }} />
+            <User size={20} style={{ color: 'var(--accent)' }} />
             <h1 className="text-2xl font-semibold app-text">Mein Profil</h1>
           </div>
         </div>

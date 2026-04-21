@@ -77,7 +77,7 @@ export default function BlitzMode() {
       <Layout>
         <div className="text-center py-20">
           <p className="text-[#888888]">Set nicht gefunden.</p>
-          <Link to="/" className="text-sm mt-2 inline-block" style={{ color: '#7F77DD' }}>← Zurück</Link>
+          <Link to="/" className="text-sm mt-2 inline-block" style={{ color: 'var(--accent)' }}>← Zurück</Link>
         </div>
       </Layout>
     );
@@ -132,7 +132,7 @@ export default function BlitzMode() {
   };
 
   const timerBg =
-    timeLeft > 50 ? '#7F77DD' : timeLeft > 20 ? '#EF9F27' : '#E24B4A';
+    timeLeft > 50 ? 'var(--accent)' : timeLeft > 20 ? '#EF9F27' : '#E24B4A';
 
   // ── Ergebnis-Bildschirm ──────────────────────────────────────────────────
 
@@ -199,7 +199,7 @@ export default function BlitzMode() {
             <button
               onClick={handleReset}
               className="flex-1 text-white font-medium py-2.5 rounded-lg transition-colors text-sm flex items-center justify-center gap-2 cursor-pointer hover:opacity-90"
-              style={{ backgroundColor: '#7F77DD' }}
+              style={{ backgroundColor: 'var(--accent)' }}
             >
               Nochmal <Zap size={15} />
             </button>
@@ -233,7 +233,7 @@ export default function BlitzMode() {
             aria-valuemax={100}
             aria-label="Blitzfortschritt"
             className="h-1.5 rounded-full transition-all duration-300"
-            style={{ width: `${(index / cards.length) * 100}%`, backgroundColor: '#7F77DD' }}
+            style={{ width: `${(index / cards.length) * 100}%`, backgroundColor: 'var(--accent)' }}
           />
         </div>
 
@@ -251,7 +251,7 @@ export default function BlitzMode() {
             <div className="rounded-2xl p-10 text-center shadow-sm border-2 border-[#ebebeb] dark:border-white/10 bg-card">
               <p className="text-xs text-[#888888] mb-4 uppercase tracking-wide">{card.reversed ? set.language2 : set.language1}</p>
               <p className="text-3xl font-bold text-[#111111] dark:text-white">{card.front}</p>
-              <p className="text-xs mt-8" style={{ color: '#7F77DD' }}>Präge es dir ein!</p>
+              <p className="text-xs mt-8" style={{ color: 'var(--accent)' }}>Präge es dir ein!</p>
             </div>
           </>
         )}
@@ -273,13 +273,13 @@ export default function BlitzMode() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder={`Übersetzung auf ${card.reversed ? set.language1 : set.language2}...`}
-                className="w-full border-2 border-[#ebebeb] dark:border-[#2a2a2a] bg-white dark:bg-[#1a1a1a] dark:text-white rounded-xl px-4 py-3 text-base focus:outline-none focus:border-[#7F77DD] transition-colors mb-3"
+                className="w-full border-2 border-[#ebebeb] dark:border-[#2a2a2a] bg-white dark:bg-[#1a1a1a] dark:text-white rounded-xl px-4 py-3 text-base focus:outline-none focus:border-[var(--accent)] transition-colors mb-3"
               />
               <button
                 type="submit"
                 disabled={!input.trim()}
                 className="w-full disabled:bg-[#ebebeb] dark:disabled:bg-[#2a2a2a] disabled:text-[#888888] text-white font-medium py-3 rounded-xl transition-colors cursor-pointer"
-                style={input.trim() ? { backgroundColor: '#7F77DD' } : undefined}
+                style={input.trim() ? { backgroundColor: 'var(--accent)' } : undefined}
               >
                 Prüfen
               </button>
@@ -316,7 +316,7 @@ export default function BlitzMode() {
             <button
               onClick={handleNext}
               className="w-full text-white font-medium py-3 rounded-xl transition-colors cursor-pointer hover:opacity-90"
-              style={{ backgroundColor: '#7F77DD' }}
+              style={{ backgroundColor: 'var(--accent)' }}
             >
               {index + 1 >= cards.length ? 'Ergebnis ansehen' : 'Weiter →'}
             </button>

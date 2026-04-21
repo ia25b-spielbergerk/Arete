@@ -219,7 +219,7 @@ export default function SetForm() {
                 type="button"
                 onClick={addCard}
                 className="text-sm font-medium flex items-center gap-1 cursor-pointer hover:opacity-80"
-                style={{ color: '#7F77DD' }}
+                style={{ color: 'var(--accent)' }}
               >
                 <span>+</span> Karte hinzufügen
               </button>

@@ -105,7 +105,7 @@ export default function LernenPage() {
 
         {/* XP / Level */}
         <div className="flex items-center gap-2 px-4 border-r app-border flex-1 min-w-0">
-          <span className="text-xs font-semibold whitespace-nowrap" style={{ color: '#7F77DD' }}>
+          <span className="text-xs font-semibold whitespace-nowrap" style={{ color: 'var(--accent)' }}>
             Lvl {levelInfo.level}
           </span>
           <span className="text-xs font-medium whitespace-nowrap hidden sm:inline" style={{ color: '#888888' }}>
@@ -114,7 +114,7 @@ export default function LernenPage() {
           <div className="w-28 shrink-0 h-1.5 bg-[#ebebeb] dark:bg-[#2a2a2a] rounded-full overflow-hidden">
             <div
               className="h-full rounded-full transition-all duration-500"
-              style={{ width: `${Math.round(levelInfo.progressInLevel * 100)}%`, backgroundColor: '#7F77DD' }}
+              style={{ width: `${Math.round(levelInfo.progressInLevel * 100)}%`, backgroundColor: 'var(--accent)' }}
             />
           </div>
           <span className="text-xs whitespace-nowrap" style={{ color: '#888888' }}>
@@ -129,7 +129,7 @@ export default function LernenPage() {
           to="/badges"
           className="flex items-center gap-1.5 pl-4 transition-opacity hover:opacity-70"
         >
-          <Medal size={14} style={{ color: badgeCount > 0 ? '#7F77DD' : '#bbbbbb' }} />
+          <Medal size={14} style={{ color: badgeCount > 0 ? 'var(--accent)' : '#bbbbbb' }} />
           <span className="text-sm font-semibold app-text">{badgeCount}</span>
           <span className="text-xs hidden sm:inline" style={{ color: '#888888' }}>Badges</span>
         </Link>
@@ -151,19 +151,19 @@ export default function LernenPage() {
           </div>
         ) : (
           <div
-            className="flex items-center justify-between rounded-xl px-4 py-2.5 mb-5 border"
-            style={{ background: 'rgba(29,158,117,0.09)', borderColor: 'rgba(29,158,117,0.22)' }}
+            className="flex items-center justify-between rounded-xl px-4 py-3 mb-5"
+            style={{ background: 'linear-gradient(135deg, oklch(0.62 0.18 160) 0%, oklch(0.52 0.18 180) 100%)' }}
           >
-            <p className="text-sm flex items-center gap-1.5" style={{ color: '#1D9E75' }}>
+            <p className="text-sm font-semibold flex items-center gap-1.5" style={{ color: '#0a0f0a' }}>
               <CalendarDays size={14} className="shrink-0" />
               <span>Tägliche Challenge – {daily.cards.length} Karten</span>
             </p>
             <button
               onClick={() => navigate('/daily')}
-              className="shrink-0 text-white text-xs font-medium px-3 py-1.5 rounded-lg transition-opacity hover:opacity-80 cursor-pointer"
-              style={{ backgroundColor: '#1D9E75' }}
+              className="shrink-0 text-xs font-bold px-3 py-1.5 rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+              style={{ background: 'rgba(0,0,0,0.18)', color: '#fff' }}
             >
-              Starten
+              Starten →
             </button>
           </div>
         )

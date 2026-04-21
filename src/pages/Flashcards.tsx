@@ -55,7 +55,7 @@ export default function Flashcards() {
       <Layout>
         <div className="text-center py-20">
           <p className="text-[#888888]">Set nicht gefunden.</p>
-          <Link to="/" className="text-sm mt-2 inline-block" style={{ color: '#7F77DD' }}>← Zurück</Link>
+          <Link to="/" className="text-sm mt-2 inline-block" style={{ color: 'var(--accent)' }}>← Zurück</Link>
         </div>
       </Layout>
     );
@@ -87,7 +87,7 @@ export default function Flashcards() {
     return (
       <Layout>
         <div className="max-w-md mx-auto text-center py-12">
-          <CreditCard size={56} className="mx-auto mb-4" style={{ color: '#7F77DD' }} />
+          <CreditCard size={56} className="mx-auto mb-4" style={{ color: 'var(--accent)' }} />
           <h1 className="text-2xl font-bold text-[#111111] dark:text-white mb-2">
             {weakOnly ? 'Schwache Karten geübt!' : 'Fertig!'}
           </h1>
@@ -121,7 +121,7 @@ export default function Flashcards() {
             <button
               onClick={() => navigate('/')}
               className="flex-1 text-white font-medium py-2.5 rounded-lg transition-colors text-sm hover:opacity-90"
-              style={{ backgroundColor: '#7F77DD' }}
+              style={{ backgroundColor: 'var(--accent)' }}
             >
               Startseite
             </button>
@@ -155,7 +155,7 @@ export default function Flashcards() {
             aria-valuemax={100}
             aria-label="Lernfortschritt"
             className="h-1.5 rounded-full transition-all duration-300"
-            style={{ width: `${progress}%`, backgroundColor: '#7F77DD' }}
+            style={{ width: `${progress}%`, backgroundColor: 'var(--accent)' }}
           />
         </div>
 
@@ -202,8 +202,8 @@ export default function Flashcards() {
               style={{
                 backfaceVisibility: 'hidden',
                 transform: 'rotateY(180deg)',
-                backgroundColor: '#7F77DD',
-                borderColor: '#7F77DD',
+                backgroundColor: 'var(--accent)',
+                borderColor: 'var(--accent)',
               }}
             >
               <div className="absolute inset-0 flex flex-col items-center justify-center p-8">

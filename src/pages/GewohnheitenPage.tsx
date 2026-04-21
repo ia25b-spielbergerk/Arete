@@ -185,8 +185,7 @@ export default function GewohnheitenPage() {
             <button
               onClick={handleAdd}
               disabled={!newName.trim()}
-              className="text-white text-sm font-medium px-4 py-1.5 rounded-lg transition-opacity hover:opacity-90 disabled:opacity-40 cursor-pointer"
-              style={{ backgroundColor: '#EF9F27' }}
+              className="text-sm font-medium px-4 py-1.5 rounded-lg transition-opacity hover:opacity-90 disabled:opacity-40 cursor-pointer bg-[#111111] dark:bg-white text-white dark:text-[#111111]"
             >
               Erstellen
             </button>

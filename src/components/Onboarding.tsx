@@ -17,7 +17,7 @@ const SCREENS: Screen[] = [
   {
     type: 'feature',
     icon: LayoutDashboard,
-    color: '#7F77DD',
+    color: 'var(--accent)',
     title: 'Dein Tagesüberblick',
     description:
       'Das Dashboard zeigt dir alles auf einen Blick: deinen aktuellen Streak, deine Kristalle, das Wetter sowie deine heutigen Aufgaben und Gewohnheiten. Hier beginnt dein Tag.',
@@ -26,7 +26,7 @@ const SCREENS: Screen[] = [
   {
     type: 'feature',
     icon: BookOpen,
-    color: '#7F77DD',
+    color: 'var(--accent)',
     title: 'Vokabeln lernen',
     description:
       'Erstelle Sets mit Karteikarten und lerne sie mit verschiedenen Modi: Karten umdrehen, Multiple-Choice Quiz, Eingabe-Test oder den schnellen Blitz-Modus. Verdiene XP und steige im Level auf.',
@@ -154,7 +154,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
               style={{
                 width: i === step ? '24px' : '8px',
                 height: '8px',
-                backgroundColor: i === step ? '#7F77DD' : 'rgba(127,119,221,0.25)',
+                backgroundColor: i === step ? 'var(--accent)' : 'oklch(0.72 0.18 160 / 0.25)',
               }}
             />
           ))}
@@ -164,7 +164,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
         <button
           onClick={isLast ? onComplete : () => setStep((s) => s + 1)}
           className="w-full max-w-xs text-white font-semibold py-3.5 rounded-xl text-base cursor-pointer hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
-          style={{ backgroundColor: '#7F77DD' }}
+          style={{ backgroundColor: 'var(--accent)' }}
         >
           {isLast ? (
             'Los geht\'s!'

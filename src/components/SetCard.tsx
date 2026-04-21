@@ -108,12 +108,12 @@ export default function SetCard({ set }: Props) {
           {set.cards.length} {set.cards.length === 1 ? 'Karte' : 'Karten'}
         </span>
         {bestScore > 0 && (
-          <span className="text-sm font-medium" style={{ color: '#7F77DD' }}>
+          <span className="text-sm font-medium" style={{ color: 'var(--accent)' }}>
             Best: {bestScore}%
           </span>
         )}
         {weakCount > 0 && (
-          <span className="text-xs px-2 py-0.5 rounded-full font-medium" style={{ background: 'rgba(239,159,39,0.12)', color: '#EF9F27' }}>
+          <span className="text-xs px-2 py-0.5 rounded-full font-medium border border-[#ebebeb] dark:border-[#2a2a2a]" style={{ color: '#EF9F27' }}>
             {weakCount} schwach
           </span>
         )}

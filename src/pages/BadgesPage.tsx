@@ -37,7 +37,7 @@ export default function BadgesPage() {
         <div className="w-full bg-[#ebebeb] dark:bg-[#2a2a2a] rounded-full h-2 mb-8">
           <div
             className="h-2 rounded-full transition-all duration-500"
-            style={{ width: `${(earned.length / BADGES.length) * 100}%`, backgroundColor: '#7F77DD' }}
+            style={{ width: `${(earned.length / BADGES.length) * 100}%`, backgroundColor: 'var(--accent)' }}
           />
         </div>
 

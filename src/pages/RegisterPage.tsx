@@ -36,7 +36,7 @@ export default function RegisterPage() {
     return (
       <div className="min-h-screen bg-page flex items-center justify-center p-4">
         <div className="w-full max-w-sm text-center">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl mb-4" style={{ backgroundColor: 'rgba(29,158,117,0.12)' }}>
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl mb-4 bg-[#f9f9f9] dark:bg-[#1a1a1a]">
             <Check size={28} style={{ color: '#1D9E75' }} />
           </div>
           <h2 className="text-xl font-semibold app-text mb-2">Registrierung erfolgreich!</h2>
@@ -171,7 +171,7 @@ export default function RegisterPage() {
 
         <p className="text-center text-sm mt-6" style={{ color: '#888888' }}>
           Bereits ein Konto?{' '}
-          <Link to="/login" className="font-medium hover:underline" style={{ color: '#7F77DD' }}>
+          <Link to="/login" className="font-medium hover:underline" style={{ color: 'var(--accent)' }}>
             Anmelden
           </Link>
         </p>

@@ -30,7 +30,7 @@ export const BADGES: Badge[] = [
     name: 'Erstes Set',
     description: 'Dein erstes Kartenset erstellt',
     icon: PackageOpen,
-    color: '#7F77DD',
+    color: 'var(--accent)',
     getProgress: (_user, sets) => ({ current: Math.min(sets.length, 1), max: 1 }),
   },
   {
@@ -38,7 +38,7 @@ export const BADGES: Badge[] = [
     name: 'Erster Quiz',
     description: 'Dein erstes Quiz abgeschlossen',
     icon: Target,
-    color: '#7F77DD',
+    color: 'var(--accent)',
     getProgress: (user) => ({ current: user.earnedBadges.includes('first_quiz') ? 1 : 0, max: 1 }),
   },
   {
@@ -46,7 +46,7 @@ export const BADGES: Badge[] = [
     name: 'Erster Test',
     description: 'Deinen ersten Test abgeschlossen',
     icon: PenLine,
-    color: '#7F77DD',
+    color: 'var(--accent)',
     getProgress: (user) => ({ current: user.earnedBadges.includes('first_test') ? 1 : 0, max: 1 }),
   },
   {
@@ -54,7 +54,7 @@ export const BADGES: Badge[] = [
     name: 'Perfekt!',
     description: '100% in einem Quiz oder Test erreicht',
     icon: Star,
-    color: '#7F77DD',
+    color: 'var(--accent)',
     getProgress: (user) => ({ current: user.earnedBadges.includes('perfect_score') ? 1 : 0, max: 1 }),
   },
   {
@@ -62,7 +62,7 @@ export const BADGES: Badge[] = [
     name: '3-Tage Streak',
     description: '3 Tage hintereinander gelernt',
     icon: Flame,
-    color: '#7F77DD',
+    color: 'var(--accent)',
     getProgress: (user) => ({ current: Math.min(user.streak, 3), max: 3 }),
   },
   {
@@ -70,7 +70,7 @@ export const BADGES: Badge[] = [
     name: '7-Tage Streak',
     description: '7 Tage hintereinander gelernt',
     icon: Trophy,
-    color: '#7F77DD',
+    color: 'var(--accent)',
     getProgress: (user) => ({ current: Math.min(user.streak, 7), max: 7 }),
   },
   {
@@ -78,7 +78,7 @@ export const BADGES: Badge[] = [
     name: 'Fleißig',
     description: '5 Kartensets erstellt',
     icon: BookMarked,
-    color: '#7F77DD',
+    color: 'var(--accent)',
     getProgress: (_user, sets) => ({ current: Math.min(sets.length, 5), max: 5 }),
   },
   {
@@ -86,7 +86,7 @@ export const BADGES: Badge[] = [
     name: 'Kartenmeister',
     description: '50 Karten insgesamt gelernt',
     icon: Layers,
-    color: '#7F77DD',
+    color: 'var(--accent)',
     getProgress: (user) => ({ current: Math.min(user.totalCardsStudied, 50), max: 50 }),
   },
 
@@ -238,7 +238,7 @@ export const BADGES: Badge[] = [
     name: 'Notiznehmer',
     description: 'Deine erste Notiz erstellt',
     icon: StickyNote,
-    color: '#7F77DD',
+    color: 'var(--accent)',
     getProgress: (_user, _sets, extra) => ({
       current: Math.min(extra?.notes.length ?? 0, 1),
       max: 1,
@@ -249,7 +249,7 @@ export const BADGES: Badge[] = [
     name: 'Ideensammler',
     description: '10 Notizen erstellt',
     icon: Lightbulb,
-    color: '#7F77DD',
+    color: 'var(--accent)',
     getProgress: (_user, _sets, extra) => ({
       current: Math.min(extra?.notes.length ?? 0, 10),
       max: 10,
@@ -260,7 +260,7 @@ export const BADGES: Badge[] = [
     name: 'Organisiert',
     description: 'Erste Notiz mit einem Tag versehen',
     icon: Tag,
-    color: '#7F77DD',
+    color: 'var(--accent)',
     getProgress: (user) => ({
       current: user.earnedBadges.includes('note_tagged') ? 1 : 0,
       max: 1,

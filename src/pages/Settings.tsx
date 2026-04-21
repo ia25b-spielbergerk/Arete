@@ -112,7 +112,7 @@ export default function SettingsPage() {
     <Layout>
       <div className="max-w-lg mx-auto">
         <div className="flex items-center gap-2 mb-8">
-          <Settings size={20} style={{ color: '#7F77DD' }} />
+          <Settings size={20} style={{ color: 'var(--accent)' }} />
           <h1 className="text-2xl font-semibold app-text">Einstellungen</h1>
         </div>
 
@@ -127,7 +127,7 @@ export default function SettingsPage() {
             >
               <div className="flex items-center gap-3">
                 {darkMode
-                  ? <Moon size={18} style={{ color: '#7F77DD' }} />
+                  ? <Moon size={18} style={{ color: 'var(--accent)' }} />
                   : <Sun size={18} style={{ color: '#EF9F27' }} />
                 }
                 <div className="text-left">
@@ -140,7 +140,7 @@ export default function SettingsPage() {
               <div className="relative w-10 h-6 rounded-full shrink-0">
                 <div
                   className={TOGGLE_CLS}
-                  style={{ backgroundColor: darkMode ? '#7F77DD' : '#ebebeb' }}
+                  style={{ backgroundColor: darkMode ? 'var(--accent)' : '#ebebeb' }}
                 >
                   <span className={`${KNOB_CLS} ${darkMode ? 'translate-x-4' : 'translate-x-0'}`} />
                 </div>
@@ -159,7 +159,7 @@ export default function SettingsPage() {
               aria-pressed={mixed}
             >
               <div className="flex items-center gap-3">
-                <Shuffle size={18} style={{ color: mixed ? '#7F77DD' : '#888888' }} />
+                <Shuffle size={18} style={{ color: mixed ? 'var(--accent)' : '#888888' }} />
                 <div className="text-left">
                   <p className="text-sm font-medium app-text">Beide Richtungen</p>
                   <p className="text-xs mt-0.5" style={{ color: '#888888' }}>
@@ -170,7 +170,7 @@ export default function SettingsPage() {
               <div className="relative w-10 h-6 rounded-full shrink-0">
                 <div
                   className={TOGGLE_CLS}
-                  style={{ backgroundColor: mixed ? '#7F77DD' : '#ebebeb' }}
+                  style={{ backgroundColor: mixed ? 'var(--accent)' : '#ebebeb' }}
                 >
                   <span className={`${KNOB_CLS} ${mixed ? 'translate-x-4' : 'translate-x-0'}`} />
                 </div>
@@ -188,7 +188,7 @@ export default function SettingsPage() {
               className="w-full flex items-center justify-between px-4 py-3.5 app-hover transition-colors cursor-pointer"
             >
               <div className="flex items-center gap-3">
-                <Medal size={18} style={{ color: '#7F77DD' }} />
+                <Medal size={18} style={{ color: 'var(--accent)' }} />
                 <div className="text-left">
                   <p className="text-sm font-medium app-text">Badges</p>
                   <p className="text-xs mt-0.5" style={{ color: '#888888' }}>
@@ -210,7 +210,7 @@ export default function SettingsPage() {
               onClick={handleResetOnboarding}
               className="w-full flex items-center gap-3 px-4 py-3.5 text-left app-hover transition-colors cursor-pointer"
             >
-              <RotateCcw size={18} style={{ color: '#7F77DD' }} className="shrink-0" />
+              <RotateCcw size={18} style={{ color: 'var(--accent)' }} className="shrink-0" />
               <div>
                 <p className="text-sm font-medium app-text">Einführung erneut anzeigen</p>
                 <p className="text-xs mt-0.5" style={{ color: '#888888' }}>
@@ -287,7 +287,7 @@ export default function SettingsPage() {
               onClick={handleExport}
               className="w-full flex items-center gap-3 px-4 py-3.5 text-left app-hover transition-colors cursor-pointer"
             >
-              <Download size={18} style={{ color: '#7F77DD' }} className="shrink-0" />
+              <Download size={18} style={{ color: 'var(--accent)' }} className="shrink-0" />
               <div>
                 <p className="text-sm font-medium app-text">Daten exportieren</p>
                 <p className="text-xs mt-0.5" style={{ color: '#888888' }}>Alle Daten als JSON-Datei herunterladen</p>
@@ -307,15 +307,15 @@ export default function SettingsPage() {
                   onClick={() => fileInputRef.current?.click()}
                   className="w-full flex items-center gap-3 px-4 py-3.5 text-left app-hover transition-colors cursor-pointer"
                 >
-                  <Upload size={18} style={{ color: '#7F77DD' }} className="shrink-0" />
+                  <Upload size={18} style={{ color: 'var(--accent)' }} className="shrink-0" />
                   <div>
                     <p className="text-sm font-medium app-text">Daten importieren</p>
                     <p className="text-xs mt-0.5" style={{ color: '#888888' }}>Backup-Datei einlesen und Daten wiederherstellen</p>
                   </div>
                 </button>
               ) : (
-                <div className="px-4 py-4" style={{ background: 'rgba(127,119,221,0.07)' }}>
-                  <p className="text-sm font-semibold mb-0.5" style={{ color: '#7F77DD' }}>Daten importieren?</p>
+                <div className="px-4 py-4 bg-[#f9f9f9] dark:bg-[#1a1a1a]">
+                  <p className="text-sm font-semibold mb-0.5" style={{ color: 'var(--accent)' }}>Daten importieren?</p>
                   <p className="text-xs mb-4 leading-relaxed" style={{ color: '#888888' }}>
                     Alle aktuellen Daten werden durch die Backup-Datei überschrieben.
                   </p>
@@ -351,7 +351,7 @@ export default function SettingsPage() {
               <div className="flex items-center gap-3">
                 <div
                   className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0"
-                  style={{ backgroundColor: profile?.avatar_color ?? '#7F77DD' }}
+                  style={{ backgroundColor: profile?.avatar_color ?? 'var(--accent)' }}
                 >
                   {profile?.username ? getInitials(profile.username) || '?' : '?'}
                 </div>

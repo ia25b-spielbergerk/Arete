@@ -77,7 +77,7 @@ function NoteEditor({ initial, onSave, onCancel }: EditorProps) {
       <div className="border-t border-[#ebebeb] dark:border-[#2a2a2a] pt-3">
         <div className="flex flex-wrap gap-1.5 mb-2">
           {tags.map((tag) => (
-            <span key={tag} className="flex items-center gap-1 text-xs px-2 py-0.5 rounded-full" style={{ background: 'rgba(127,119,221,0.12)', color: '#7F77DD' }}>
+            <span key={tag} className="flex items-center gap-1 text-xs px-2 py-0.5 rounded-full" style={{ background: 'var(--accent-bg)', color: 'var(--accent)' }}>
               <Tag size={9} />
               {tag}
               <button onClick={() => removeTag(tag)} className="cursor-pointer ml-0.5 hover:opacity-70">
@@ -99,7 +99,7 @@ function NoteEditor({ initial, onSave, onCancel }: EditorProps) {
             onClick={addTag}
             disabled={!tagInput.trim()}
             className="text-xs disabled:opacity-40 cursor-pointer font-medium"
-            style={{ color: '#7F77DD' }}
+            style={{ color: 'var(--accent)' }}
           >
             + Tag
           </button>
@@ -227,7 +227,7 @@ export default function NotizenPage() {
                 onClick={() => setActiveTag(null)}
                 className="text-xs px-2.5 py-1 rounded-full border transition-colors cursor-pointer"
                 style={activeTag === null
-                  ? { borderColor: '#7F77DD', background: 'rgba(127,119,221,0.1)', color: '#7F77DD' }
+                  ? { borderColor: 'var(--accent)', background: 'var(--accent-bg)', color: 'var(--accent)' }
                   : { borderColor: '#ebebeb', color: '#888888' }
                 }
               >
@@ -239,7 +239,7 @@ export default function NotizenPage() {
                   onClick={() => setActiveTag(activeTag === tag ? null : tag)}
                   className="text-xs px-2.5 py-1 rounded-full border transition-colors cursor-pointer"
                   style={activeTag === tag
-                    ? { borderColor: '#7F77DD', background: 'rgba(127,119,221,0.1)', color: '#7F77DD' }
+                    ? { borderColor: 'var(--accent)', background: 'var(--accent-bg)', color: 'var(--accent)' }
                     : { borderColor: '#ebebeb', color: '#888888' }
                   }
                 >
@@ -296,7 +296,7 @@ export default function NotizenPage() {
                     <button
                       onClick={(e) => { e.stopPropagation(); togglePin(note); }}
                       className="p-1 rounded transition-colors cursor-pointer"
-                      style={note.pinned ? { color: '#7F77DD' } : { color: '#bbbbbb' }}
+                      style={note.pinned ? { color: 'var(--accent)' } : { color: '#bbbbbb' }}
                       title={note.pinned ? 'Unpin' : 'Pinnen'}
                     >
                       {note.pinned ? <Pin size={13} /> : <PinOff size={13} />}
@@ -323,7 +323,7 @@ export default function NotizenPage() {
                 {note.tags.length > 0 && (
                   <div className="flex flex-wrap gap-1 mb-2">
                     {note.tags.map((tag) => (
-                      <span key={tag} className="text-[10px] px-1.5 py-0.5 rounded-full" style={{ background: 'rgba(127,119,221,0.12)', color: '#7F77DD' }}>
+                      <span key={tag} className="text-[10px] px-1.5 py-0.5 rounded-full" style={{ background: 'var(--accent-bg)', color: 'var(--accent)' }}>
                         {tag}
                       </span>
                     ))}

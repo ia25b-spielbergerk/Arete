@@ -168,8 +168,8 @@ export default function StatsContent() {
 
   // ── Overview ─────────────────────────────────────────────────────────────
   const overviewStats = [
-    { label: 'Gelernte Karten', value: totalCardsInPeriod, color: '#7F77DD', icon: BookOpen },
-    { label: 'Aktive Lerntage', value: activeDaysInPeriod, color: '#7F77DD', icon: BookOpen },
+    { label: 'Gelernte Karten', value: totalCardsInPeriod, color: 'var(--accent)', icon: BookOpen },
+    { label: 'Aktive Lerntage', value: activeDaysInPeriod, color: 'var(--accent)', icon: BookOpen },
     { label: 'Längster Streak', value: longestStreak, color: '#EF9F27', icon: Repeat2 },
     { label: 'Tasks erledigt', value: totalTasksDone, color: '#1D9E75', icon: ListChecks },
     { label: 'Tagebucheinträge', value: diaryInPeriod.length, color: '#378ADD', icon: CalendarDays },
@@ -183,7 +183,7 @@ export default function StatsContent() {
         {/* Header + Toggle */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2">
-            <BarChart2 size={20} style={{ color: '#7F77DD' }} />
+            <BarChart2 size={20} style={{ color: 'var(--accent)' }} />
             <h1 className="text-2xl font-bold app-text">Statistiken</h1>
           </div>
           <div className="flex bg-[#f5f5f5] dark:bg-[#1a1a1a] rounded-lg p-0.5">
@@ -221,7 +221,7 @@ export default function StatsContent() {
         </div>
 
         {/* LERNEN */}
-        <SectionCard title="Lernen" icon={BookOpen} color="#7F77DD">
+        <SectionCard title="Lernen" icon={BookOpen} color="var(--accent)">
           {totalCardsInPeriod === 0 ? (
             <EmptyState text={`Noch keine Lernaktivität in den letzten ${days} Tagen.`} />
           ) : (
@@ -244,15 +244,15 @@ export default function StatsContent() {
                   />
                   <Tooltip
                     contentStyle={tooltipStyle}
-                    cursor={{ stroke: '#7F77DD', strokeWidth: 1, strokeDasharray: '4 4' }}
+                    cursor={{ stroke: 'var(--accent)', strokeWidth: 1, strokeDasharray: '4 4' }}
                     formatter={(v) => [v, 'Karten']}
                   />
                   <Line
                     type="monotone"
                     dataKey="karten"
-                    stroke="#7F77DD"
+                    stroke="var(--accent)"
                     strokeWidth={2}
-                    dot={{ r: 3, fill: '#7F77DD', strokeWidth: 0 }}
+                    dot={{ r: 3, fill: 'var(--accent)', strokeWidth: 0 }}
                     activeDot={{ r: 5, strokeWidth: 0 }}
                   />
                 </LineChart>
@@ -295,7 +295,7 @@ export default function StatsContent() {
                         <p className="text-xs text-[#555555] dark:text-white/60 truncate flex-1">{s.name}</p>
                         <div className="flex gap-1.5 shrink-0">
                           {s.quiz > 0 && (
-                            <span className="text-xs px-2 py-0.5 rounded-full font-medium" style={{ background: 'rgba(127,119,221,0.12)', color: '#7F77DD' }}>
+                            <span className="text-xs px-2 py-0.5 rounded-full font-medium" style={{ background: 'var(--accent-bg)', color: 'var(--accent)' }}>
                               Quiz {s.quiz}%
                             </span>
                           )}

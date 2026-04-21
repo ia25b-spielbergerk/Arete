@@ -12,7 +12,7 @@ export default function NotFound() {
         <Link
           to="/"
           className="inline-block text-white font-medium px-6 py-2.5 rounded-lg transition-colors hover:opacity-90"
-          style={{ backgroundColor: '#7F77DD' }}
+          style={{ backgroundColor: 'var(--accent)' }}
         >
           Zurück zur Startseite
         </Link>

@@ -15,8 +15,8 @@ export default function BottomNav() {
   const location = useLocation();
   const darkMode = useStore((s) => s.darkMode);
 
-  const activeColor = darkMode ? '#ffffff' : '#111111';
-  const inactiveColor = '#bbbbbb';
+  const activeColor = 'var(--accent)';
+  const inactiveColor = darkMode ? 'rgba(255,255,255,0.35)' : '#bbbbbb';
 
   const isActive = (path: string) => {
     if (path === '/') return location.pathname === '/';
@@ -26,7 +26,7 @@ export default function BottomNav() {
   return (
     <nav
       className="fixed bottom-0 left-0 right-0 z-20 border-t"
-      style={{ backgroundColor: darkMode ? '#0f0f0f' : '#ffffff', borderTopColor: darkMode ? '#2a2a2a' : '#ebebeb' }}
+      style={{ backgroundColor: 'var(--bg-page)', borderTopColor: 'var(--border)' }}
     >
       <div className="max-w-4xl mx-auto flex items-stretch">
         {TABS.map(({ path, label, Icon }) => {

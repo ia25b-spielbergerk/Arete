@@ -79,7 +79,7 @@ export default function LoginPage() {
           </div>
 
           <div className="flex justify-end -mt-1">
-            <Link to="/passwort-vergessen" className="text-xs hover:underline" style={{ color: '#7F77DD' }}>
+            <Link to="/passwort-vergessen" className="text-xs hover:underline" style={{ color: 'var(--accent)' }}>
               Passwort vergessen?
             </Link>
           </div>
@@ -106,7 +106,7 @@ export default function LoginPage() {
 
         <p className="text-center text-sm mt-6" style={{ color: '#888888' }}>
           Noch kein Konto?{' '}
-          <Link to="/register" className="font-medium hover:underline" style={{ color: '#7F77DD' }}>
+          <Link to="/register" className="font-medium hover:underline" style={{ color: 'var(--accent)' }}>
             Jetzt registrieren
           </Link>
         </p>
