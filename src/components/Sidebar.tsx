@@ -151,10 +151,14 @@ export default function Sidebar() {
         style={{ borderTopColor: 'var(--border)', padding: collapsed ? '12px 0' : '12px 16px' }}
         ref={menuRef}
       >
-        {/* Dropdown — opens upward */}
+        {/* Dropdown — opens upward when expanded, rightward when collapsed */}
         {menuOpen && (
           <div
-            className="absolute bottom-full left-0 mb-2 w-52 rounded-xl border shadow-lg overflow-hidden z-50"
+            className={`absolute w-52 rounded-xl border shadow-lg overflow-hidden z-50 ${
+              collapsed
+                ? 'left-full bottom-0 ml-2'
+                : 'bottom-full left-0 mb-2'
+            }`}
             style={{ backgroundColor: 'var(--sidebar-bg)', borderColor: 'var(--border)' }}
           >
             <button
