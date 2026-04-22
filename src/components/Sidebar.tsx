@@ -2,7 +2,7 @@ import { useRef, useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, BookOpen, CalendarDays, Repeat2, StickyNote,
-  BarChart2, ShoppingBag, User, Moon, Sun, Settings, LogOut, ChevronLeft,
+  BarChart2, ShoppingBag, User, Moon, Sun, Settings, LogOut, ChevronLeft, ChevronRight,
 } from 'lucide-react';
 import { useAuth, getInitials } from '../lib/AuthContext';
 import { useStore } from '../store';
@@ -203,38 +203,46 @@ export default function Sidebar() {
           </div>
         )}
 
-        {/* Avatar row */}
-        <div
-          className="flex items-center"
-          style={{ gap: collapsed ? '0' : '10px', justifyContent: collapsed ? 'center' : 'flex-start' }}
-        >
-          <div className="relative group shrink-0">
-            <button
-              onClick={() => setMenuOpen((v) => !v)}
-              className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold cursor-pointer hover:opacity-80 transition-opacity"
+        {/* Avatar row — full-width clickable button */}
+        <div className="relative group">
+          <button
+            onClick={() => setMenuOpen((v) => !v)}
+            className="w-full flex items-center rounded-lg cursor-pointer transition-colors"
+            style={{
+              gap: collapsed ? '0' : '10px',
+              padding: collapsed ? '6px 0' : '6px 8px',
+              justifyContent: collapsed ? 'center' : 'flex-start',
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.06)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+          >
+            <div
+              className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0"
               style={{ backgroundColor: avatarColor }}
-              title={collapsed ? (profile?.username ?? 'Profil') : undefined}
             >
               {initials}
-            </button>
-            {/* Tooltip for avatar when collapsed */}
-            {collapsed && (
-              <div
-                className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2.5 py-1 rounded-lg text-xs font-medium whitespace-nowrap z-50 opacity-0 group-hover:opacity-100"
-                style={{
-                  backgroundColor: 'var(--text-1)',
-                  color: 'var(--bg-page)',
-                  transition: 'opacity 150ms ease',
-                }}
-              >
-                {profile?.username ?? 'Profil'} · Lvl {levelInfo.level}
-              </div>
+            </div>
+            {!collapsed && (
+              <>
+                <div className="flex-1 min-w-0 text-left">
+                  <p className="text-sm font-semibold app-text truncate">{profile?.username ?? '…'}</p>
+                  <p className="text-[11px]" style={{ color: 'var(--text-2)' }}>Lvl {levelInfo.level}</p>
+                </div>
+                <ChevronRight size={14} style={{ color: 'var(--text-2)', flexShrink: 0 }} />
+              </>
             )}
-          </div>
-          {!collapsed && (
-            <div className="flex-1 min-w-0" style={{ overflow: 'hidden' }}>
-              <p className="text-sm font-semibold app-text truncate">{profile?.username ?? '…'}</p>
-              <p className="text-[11px]" style={{ color: 'var(--text-2)' }}>Lvl {levelInfo.level}</p>
+          </button>
+          {/* Tooltip when collapsed */}
+          {collapsed && (
+            <div
+              className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2.5 py-1 rounded-lg text-xs font-medium whitespace-nowrap z-50 opacity-0 group-hover:opacity-100"
+              style={{
+                backgroundColor: 'var(--text-1)',
+                color: 'var(--bg-page)',
+                transition: 'opacity 150ms ease',
+              }}
+            >
+              {profile?.username ?? 'Profil'} · Lvl {levelInfo.level}
             </div>
           )}
         </div>
