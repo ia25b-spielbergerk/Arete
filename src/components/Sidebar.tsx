@@ -187,11 +187,31 @@ export default function Sidebar() {
                 }
                 Dark Mode
               </span>
+              {/* iOS-style toggle */}
               <span
-                className="text-[11px] font-semibold px-1.5 py-0.5 rounded"
-                style={{ backgroundColor: 'var(--bg-hover)', color: 'var(--text-2)' }}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  width: '32px',
+                  height: '18px',
+                  borderRadius: '9px',
+                  padding: '2px',
+                  flexShrink: 0,
+                  transition: 'background-color 200ms ease',
+                  backgroundColor: darkMode ? '#1D9E75' : 'rgba(255,255,255,0.18)',
+                }}
               >
-                {darkMode ? 'An' : 'Aus'}
+                <span
+                  style={{
+                    width: '14px',
+                    height: '14px',
+                    borderRadius: '50%',
+                    backgroundColor: '#ffffff',
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.3)',
+                    transition: 'transform 200ms ease',
+                    transform: darkMode ? 'translateX(14px)' : 'translateX(0)',
+                  }}
+                />
               </span>
             </button>
             <button
