@@ -1,6 +1,9 @@
 import { useRef, useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, BookOpen, CalendarDays, Repeat2, StickyNote, BarChart2, ShoppingBag, User, Moon, Sun, Settings, LogOut } from 'lucide-react';
+import {
+  LayoutDashboard, BookOpen, CalendarDays, Repeat2, StickyNote,
+  BarChart2, ShoppingBag, User, Moon, Sun, Settings, LogOut, ChevronLeft,
+} from 'lucide-react';
 import { useAuth, getInitials } from '../lib/AuthContext';
 import { useStore } from '../store';
 import { getLevelInfo } from '../xp';
@@ -15,6 +18,8 @@ const NAV_ITEMS = [
   { path: '/shop',         label: 'Shop',      Icon: ShoppingBag     },
 ] as const;
 
+const STORAGE_KEY = 'sidebar_collapsed';
+
 export default function Sidebar() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -24,8 +29,19 @@ export default function Sidebar() {
   const toggleDarkMode = useStore((s) => s.toggleDarkMode);
   const levelInfo = getLevelInfo(user.xp ?? 0);
 
+  const [collapsed, setCollapsed] = useState<boolean>(
+    () => localStorage.getItem(STORAGE_KEY) === 'true'
+  );
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  const toggleCollapsed = () => {
+    setCollapsed((v) => {
+      const next = !v;
+      localStorage.setItem(STORAGE_KEY, String(next));
+      return next;
+    });
+  };
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -46,42 +62,93 @@ export default function Sidebar() {
 
   return (
     <aside
-      className="hidden md:flex flex-col shrink-0 h-screen sticky top-0 border-r"
-      style={{ width: '220px', backgroundColor: 'var(--sidebar-bg)', borderRightColor: 'var(--border)' }}
+      className="hidden md:flex flex-col shrink-0 h-screen sticky top-0 border-r overflow-hidden"
+      style={{
+        width: collapsed ? '60px' : '220px',
+        backgroundColor: 'var(--sidebar-bg)',
+        borderRightColor: 'var(--border)',
+        transition: 'width 300ms cubic-bezier(0.4,0,0.2,1)',
+      }}
     >
-      {/* Logo */}
-      <div className="px-5 pt-6 pb-5">
-        <p className="text-[18px] font-bold app-text" style={{ letterSpacing: '-0.3px' }}>Aretes</p>
-        <p className="text-[11px] mt-0.5" style={{ color: 'var(--text-2)' }}>Dein Lernbegleiter</p>
+      {/* Logo + Toggle */}
+      <div
+        className="flex items-center border-b shrink-0"
+        style={{
+          borderBottomColor: 'var(--border)',
+          height: '56px',
+          padding: collapsed ? '0' : '0 12px 0 20px',
+          justifyContent: collapsed ? 'center' : 'space-between',
+        }}
+      >
+        {!collapsed && (
+          <div style={{ overflow: 'hidden', whiteSpace: 'nowrap' }}>
+            <p className="text-[15px] font-bold app-text" style={{ letterSpacing: '-0.3px' }}>Aretes</p>
+            <p className="text-[10px]" style={{ color: 'var(--text-2)' }}>Dein Lernbegleiter</p>
+          </div>
+        )}
+        <button
+          onClick={toggleCollapsed}
+          className="shrink-0 flex items-center justify-center w-7 h-7 rounded-lg cursor-pointer transition-colors app-hover"
+          style={{ color: 'var(--text-2)' }}
+          title={collapsed ? 'Sidebar ausklappen' : 'Sidebar einklappen'}
+        >
+          <ChevronLeft
+            size={16}
+            style={{
+              transition: 'transform 300ms cubic-bezier(0.4,0,0.2,1)',
+              transform: collapsed ? 'rotate(180deg)' : 'rotate(0deg)',
+            }}
+          />
+        </button>
       </div>
 
       {/* Nav Items */}
-      <nav className="flex-1 px-3 space-y-0.5 overflow-y-auto">
+      <nav className="flex-1 py-3 overflow-y-auto overflow-x-hidden" style={{ padding: collapsed ? '12px 0' : '12px 8px' }}>
         {NAV_ITEMS.map(({ path, label, Icon }) => {
           const active = isActive(path);
           return (
-            <Link
-              key={path}
-              to={path}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors"
-              style={active
-                ? { backgroundColor: 'var(--accent-bg)', color: 'var(--accent)', fontWeight: 600 }
-                : { color: 'var(--text-2)' }
-              }
-              onMouseEnter={(e) => { if (!active) e.currentTarget.style.backgroundColor = 'var(--bg-hover)'; }}
-              onMouseLeave={(e) => { if (!active) e.currentTarget.style.backgroundColor = 'transparent'; }}
-            >
-              <Icon size={17} strokeWidth={active ? 2.2 : 1.8} />
-              {label}
-            </Link>
+            <div key={path} className="relative group">
+              <Link
+                to={path}
+                className="flex items-center rounded-lg transition-colors"
+                style={{
+                  gap: collapsed ? '0' : '10px',
+                  padding: collapsed ? '10px 0' : '9px 12px',
+                  justifyContent: collapsed ? 'center' : 'flex-start',
+                  ...(active
+                    ? { backgroundColor: 'var(--accent-bg)', color: 'var(--accent)', fontWeight: 600 }
+                    : { color: 'var(--text-2)' }),
+                }}
+                onMouseEnter={(e) => { if (!active) e.currentTarget.style.backgroundColor = 'var(--bg-hover)'; }}
+                onMouseLeave={(e) => { if (!active) e.currentTarget.style.backgroundColor = active ? 'var(--accent-bg)' : 'transparent'; }}
+              >
+                <Icon size={18} strokeWidth={active ? 2.2 : 1.8} style={{ flexShrink: 0 }} />
+                {!collapsed && (
+                  <span className="text-sm truncate">{label}</span>
+                )}
+              </Link>
+              {/* Tooltip when collapsed */}
+              {collapsed && (
+                <div
+                  className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2.5 py-1 rounded-lg text-xs font-medium whitespace-nowrap z-50 opacity-0 group-hover:opacity-100"
+                  style={{
+                    backgroundColor: 'var(--text-1)',
+                    color: 'var(--bg-page)',
+                    transition: 'opacity 150ms ease',
+                  }}
+                >
+                  {label}
+                </div>
+              )}
+            </div>
           );
         })}
       </nav>
 
       {/* User Footer */}
       <div
-        className="px-4 py-4 border-t relative"
-        style={{ borderTopColor: 'var(--border)' }}
+        className="border-t relative shrink-0"
+        style={{ borderTopColor: 'var(--border)', padding: collapsed ? '12px 0' : '12px 16px' }}
         ref={menuRef}
       >
         {/* Dropdown — opens upward */}
@@ -137,19 +204,39 @@ export default function Sidebar() {
         )}
 
         {/* Avatar row */}
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => setMenuOpen((v) => !v)}
-            className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
-            style={{ backgroundColor: avatarColor }}
-            title="Menü öffnen"
-          >
-            {initials}
-          </button>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold app-text truncate">{profile?.username ?? '…'}</p>
-            <p className="text-[11px]" style={{ color: 'var(--text-2)' }}>Lvl {levelInfo.level}</p>
+        <div
+          className="flex items-center"
+          style={{ gap: collapsed ? '0' : '10px', justifyContent: collapsed ? 'center' : 'flex-start' }}
+        >
+          <div className="relative group shrink-0">
+            <button
+              onClick={() => setMenuOpen((v) => !v)}
+              className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold cursor-pointer hover:opacity-80 transition-opacity"
+              style={{ backgroundColor: avatarColor }}
+              title={collapsed ? (profile?.username ?? 'Profil') : undefined}
+            >
+              {initials}
+            </button>
+            {/* Tooltip for avatar when collapsed */}
+            {collapsed && (
+              <div
+                className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2.5 py-1 rounded-lg text-xs font-medium whitespace-nowrap z-50 opacity-0 group-hover:opacity-100"
+                style={{
+                  backgroundColor: 'var(--text-1)',
+                  color: 'var(--bg-page)',
+                  transition: 'opacity 150ms ease',
+                }}
+              >
+                {profile?.username ?? 'Profil'} · Lvl {levelInfo.level}
+              </div>
+            )}
           </div>
+          {!collapsed && (
+            <div className="flex-1 min-w-0" style={{ overflow: 'hidden' }}>
+              <p className="text-sm font-semibold app-text truncate">{profile?.username ?? '…'}</p>
+              <p className="text-[11px]" style={{ color: 'var(--text-2)' }}>Lvl {levelInfo.level}</p>
+            </div>
+          )}
         </div>
       </div>
     </aside>
