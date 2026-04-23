@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { CardSet, SetProgress, UserData, BadgeId, CardStats, DailyState, DiaryEntry, Task, Habit, Note, DailyCrystalTracker } from './types';
+import type { CardSet, SetProgress, UserData, BadgeId, CardStats, DailyState, DiaryEntry, Task, Habit, Note, DailyCrystalTracker, AppNotification } from './types';
 import {
   DEFAULT_USER,
   EMPTY_TRACKER,
@@ -64,6 +64,7 @@ interface AppState {
   habits: Habit[];
   notes: Note[];
   dailyCrystals: DailyCrystalTracker;
+  notifications: AppNotification[];
 
   // Auth
   setCurrentUser: (id: string | null) => void;
@@ -133,6 +134,10 @@ interface AppState {
   addNote: (note: Note) => void;
   updateNote: (note: Note) => void;
   removeNote: (id: string) => void;
+
+  // Benachrichtigungen
+  addNotification: (n: AppNotification) => void;
+  markAllNotificationsRead: () => void;
 }
 
 const today0 = new Date().toISOString().slice(0, 10);
@@ -154,6 +159,10 @@ export const useStore = create<AppState>((set, get) => ({
   habits: [],
   notes: [],
   dailyCrystals: EMPTY_TRACKER(today0),
+  notifications: (() => {
+    try { return JSON.parse(localStorage.getItem('lernapp_notifications') ?? '[]') as AppNotification[]; }
+    catch { return []; }
+  })(),
 
   // ── Auth ─────────────────────────────────────────────────────────────────
 
@@ -358,6 +367,20 @@ export const useStore = create<AppState>((set, get) => ({
         pendingBadges: [...state.pendingBadges, ...newBadges],
         pendingCrystalGain: state.pendingCrystalGain + crystalGain,
       }));
+      const now = new Date().toISOString();
+      newBadges.forEach((badgeId) => {
+        const badge = BADGES.find((b) => b.id === badgeId);
+        if (badge) {
+          get().addNotification({
+            id: `achievement_${badgeId}`,
+            type: 'achievement',
+            title: 'Badge freigeschaltet!',
+            text: badge.name,
+            timestamp: now,
+            read: false,
+          });
+        }
+      });
     }
 
     return newBadges;
@@ -523,6 +546,16 @@ export const useStore = create<AppState>((set, get) => ({
       pendingCrystalGain: state.pendingCrystalGain + crystalGain,
     }));
     if (userId) saveUser(withCrystals, userId).catch(console.error);
+    if (leveledUp) {
+      get().addNotification({
+        id: `level_up_${newLevel}`,
+        type: 'level_up',
+        title: 'Level Up!',
+        text: `Du hast Level ${newLevel} erreicht!`,
+        timestamp: new Date().toISOString(),
+        read: false,
+      });
+    }
   },
 
   dismissLevelUp: () => set({ pendingLevelUp: null }),
@@ -833,6 +866,25 @@ export const useStore = create<AppState>((set, get) => ({
     if (!userId) return;
     set((state) => ({ notes: state.notes.filter((n) => n.id !== id) }));
     deleteNote(id, userId).catch(console.error);
+  },
+
+  // ── Benachrichtigungen ────────────────────────────────────────────────────
+
+  addNotification: (n) => {
+    set((state) => {
+      if (state.notifications.some((x) => x.id === n.id)) return state;
+      const updated = [n, ...state.notifications].slice(0, 50);
+      localStorage.setItem('lernapp_notifications', JSON.stringify(updated));
+      return { notifications: updated };
+    });
+  },
+
+  markAllNotificationsRead: () => {
+    set((state) => {
+      const updated = state.notifications.map((n) => ({ ...n, read: true }));
+      localStorage.setItem('lernapp_notifications', JSON.stringify(updated));
+      return { notifications: updated };
+    });
   },
 }));
 

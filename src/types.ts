@@ -149,3 +149,16 @@ export interface Note {
   createdAt: string;
   updatedAt: string;
 }
+
+// ── Benachrichtigungen ────────────────────────────────────────────────────────
+
+export type NotificationType = 'achievement' | 'level_up' | 'streak_warning' | 'habit_reminder' | 'challenge_reminder';
+
+export interface AppNotification {
+  id: string;
+  type: NotificationType;
+  title: string;
+  text: string;
+  timestamp: string;
+  read: boolean;
+}

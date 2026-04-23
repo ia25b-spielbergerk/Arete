@@ -6,6 +6,7 @@ import {
   BookOpen, Plus, Repeat2, ArrowRight, Zap,
 } from 'lucide-react';
 import Layout from '../components/Layout';
+import NotificationBell from '../components/NotificationBell';
 import { useStore } from '../store';
 import { useAuth } from '../lib/AuthContext';
 
@@ -156,6 +157,50 @@ export default function Dashboard() {
     niedrig: 'bg-[#1D9E75]',
   };
 
+  // Evening check: fire once on mount if it's 20:00 or later
+  useEffect(() => {
+    const hour = new Date().getHours();
+    if (hour < 20) return;
+    const state = useStore.getState();
+    const t = new Date().toISOString().slice(0, 10);
+
+    const h = state.habits;
+    const doneToday = h.filter((x) => x.checkIns.includes(t)).length;
+    if (h.length > 0 && doneToday < h.length) {
+      state.addNotification({
+        id: `habit_reminder_${t}`,
+        type: 'habit_reminder',
+        title: 'Gewohnheiten',
+        text: `Noch ${h.length - doneToday} Gewohnheit${h.length - doneToday > 1 ? 'en' : ''} offen heute.`,
+        timestamp: new Date().toISOString(),
+        read: false,
+      });
+    }
+    const d = state.daily;
+    if (d && !d.completed && d.cards.length > 0) {
+      state.addNotification({
+        id: `challenge_reminder_${t}`,
+        type: 'challenge_reminder',
+        title: 'Tägliche Challenge',
+        text: 'Du hast die Tagesaufgabe noch nicht abgeschlossen.',
+        timestamp: new Date().toISOString(),
+        read: false,
+      });
+    }
+    const u = state.user;
+    if (u.streak > 0 && u.lastActiveDate !== t) {
+      state.addNotification({
+        id: `streak_warning_${t}`,
+        type: 'streak_warning',
+        title: 'Streak in Gefahr!',
+        text: `Dein ${u.streak}-Tage-Streak bricht heute ab, wenn du nichts lernst.`,
+        timestamp: new Date().toISOString(),
+        read: false,
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <Layout>
       {/* Header — Begrüssung */}
@@ -170,8 +215,9 @@ export default function Dashboard() {
               {profile?.username ? <><br />{profile.username}</> : ''}
             </p>
           </div>
-          <div className="flex items-center mt-1">
+          <div className="flex items-center gap-2 mt-1">
             <WeatherWidget />
+            <NotificationBell />
           </div>
         </div>
       </div>
